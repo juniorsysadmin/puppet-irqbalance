@@ -10,17 +10,17 @@ class irqbalance::initscripts inherits irqbalance {
       $init_file_mode   = $irqbalance::sysv_file_mode
       $init_file_owner  = $irqbalance::sysv_file_owner
       $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source = $irqbalance::sysv_init_source
+      $init_file_source = $irqbalance::sysv_init_src
 
       ensure_resource('package', $irqbalance::sysv_package, {'ensure' => 'present' })
       Package[$irqbalance::sysv_package] -> Service['irqbalance']
     }
     'openrc': {
-      $init_file_group = $irqbalance::sysv_file_group
-      $init_file_mode  = $irqbalance::sysv_file_mode
-      $init_file_owner = $irqbalance::sysv_file_owner
-      $init_file_path  = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source = $irqbalance::sysv_init_source
+      $init_file_group  = $irqbalance::sysv_file_group
+      $init_file_mode   = $irqbalance::sysv_file_mode
+      $init_file_owner  = $irqbalance::sysv_file_owner
+      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
+      $init_file_source = $irqbalance::sysv_init_src
 
       ensure_resource('package', 'sys-apps/openrc', {'ensure' => 'present' })
       Package['sys-apps/openrc'] -> Service['irqbalance']
@@ -30,14 +30,14 @@ class irqbalance::initscripts inherits irqbalance {
       $init_file_mode   = $irqbalance::sysv_file_mode
       $init_file_owner  = $irqbalance::sysv_file_owner
       $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source = $irqbalance::sysv_init_source
+      $init_file_source = $irqbalance::sysv_init_src
     }
     'systemd': {
       $init_file_group  = $irqbalance::systemd_file_group
       $init_file_mode   = $irqbalance::systemd_file_mode
       $init_file_owner  = $irqbalance::systemd_file_owner
       $init_file_path   = "${irqbalance::systemd_service_dir}/${irqbalance::service_name}.service"
-      $init_file_source = $irqbalance::systemd_init_source
+      $init_file_source = $irqbalance::systemd_init_src
 
       ensure_resource('package', $irqbalance::systemd_package, {'ensure' => 'present' })
       Package[$irqbalance::systemd_package] -> Service['irqbalance']
@@ -54,7 +54,7 @@ class irqbalance::initscripts inherits irqbalance {
       $init_file_mode   = $irqbalance::upstart_file_mode
       $init_file_owner  = $irqbalance::upstart_file_owner
       $init_file_path   = "/etc/init/${irqbalance::service_name}"
-      $init_file_source = $irqbalance::upstart_init_source
+      $init_file_source = $irqbalance::upstart_init_src
 
       ensure_resource('package', $irqbalance::upstart_package, {'ensure' => 'present' })
       Package[$irqbalance::upstart_package] -> Service['irqbalance']
@@ -64,7 +64,7 @@ class irqbalance::initscripts inherits irqbalance {
     }
   }
 
-  if !($irqbalance::use_default_init_script) {
+  if !($irqbalance::prefer_default_init_script) {
 
     file { $init_file_path:
       ensure  => file,
