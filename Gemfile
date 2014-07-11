@@ -14,6 +14,7 @@ group :development do
   gem "travis-lint"
   gem "beaker"
   gem "beaker-rspec"
+  gem "minitest", '~> 4.0'
   gem "vagrant-wrapper"
   gem "guard-rake"
   gem "pry"
