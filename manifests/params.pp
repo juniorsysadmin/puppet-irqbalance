@@ -45,9 +45,7 @@ class irqbalance::params {
       $config              = '/etc/sysconfig/irqbalance'
       $package_name        = [ 'irqbalance' ]
       $service_name        = 'irqbalance'
-      $systemd_package     = [ 'systemd' ]
       $systemd_service_dir = '/usr/lib/systemd/system'
-      $upstart_package     = [ 'upstart' ]
 
       # CentOS/RHEL 5
       # The irqbalance version included with CentOS 5 is 0.55
@@ -108,8 +106,6 @@ class irqbalance::params {
       $package_name           = [ 'irqbalance' ]
       $service_name           = 'irqbalance'
       $systemd_service_dir    = '/lib/systemd/system'
-      $sysv_package           = [ 'sysvinit' ]
-      $upstart_package        = [ 'upstart']
       $use_systemd_on_debian  = false
       $use_systemd_on_ubuntu  = false
       $use_upstart_on_debian  = false
@@ -151,7 +147,6 @@ class irqbalance::params {
         $args_regex= '^(--hintpolicy=.+|--powerthresh=.+)$'
         $config_template = 'irqbalance/config/debian.erb'
         $service_provider = 'debian'
-        $systemd_package = [ 'systemd-sysv' ]
         $use_upstart_on_debian7 = false
       }
 
@@ -198,7 +193,6 @@ class irqbalance::params {
         $config_template = 'irqbalance/debian-10x.erb'
         $args_regex = '^(--banirq=.+|--debug|--hintpolicy=.+|--pid=.+|--policyscript=.+|--powerthresh=.+)$'
         $service_provider = 'upstart'
-        $systemd_package = [ 'systemd-services' ]
         $upstart_init_template = 'irqbalance/init/upstart/debian-with-foreground-irqbalance.conf.erb'
       }
 
