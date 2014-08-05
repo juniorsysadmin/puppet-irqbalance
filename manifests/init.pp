@@ -13,7 +13,7 @@ class irqbalance (
   $config_file_mode           = $irqbalance::params::config_file_mode,
   $config_file_owner          = $irqbalance::params::config_file_owner,
   $config_file_source         = $irqbalance::params::config_file_source,
-  $config_template_source     = $irqbalance::params::config_template_source,
+  $config_template            = $irqbalance::params::config_template,
   $deepestcache               = $irqbalance::params::deepestcache,
   $debug                      = $irqbalance::params::debug,
   $hintpolicy                 = $irqbalance::params::hintpolicy,
@@ -27,23 +27,26 @@ class irqbalance (
   $service_enable             = $irqbalance::params::service_enable,
   $service_ensure             = $irqbalance::params::service_ensure,
   $service_manage             = $irqbalance::params::service_manage,
-  $service_provider           = $irqbalance::params::service_provider,
+  $svc_provider               = $irqbalance::params::service_provider,
   $service_name               = $irqbalance::params::service_name,
   $systemd_file_group         = $irqbalance::params::systemd_file_group,
   $systemd_file_mode          = $irqbalance::params::systemd_file_mode,
   $systemd_file_owner         = $irqbalance::params::systemd_file_owner,
   $systemd_init_source        = $irqbalance::params::systemd_init_source,
+  $systemd_init_template      = $irqbalance::params::systemd_init_template,
   $systemd_package            = $irqbalance::params::systemd_package,
   $systemd_service_dir        = $irqbalance::params::systemd_service_dir,
   $sysv_file_group            = $irqbalance::params::sysv_file_group,
   $sysv_file_mode             = $irqbalance::params::sysv_file_mode,
   $sysv_file_owner            = $irqbalance::params::sysv_file_owner,
   $sysv_init_source           = $irqbalance::params::sysv_init_source,
+  $sysv_init_template         = $irqbalance::params::sysv_init_template,
   $sysv_package               = $irqbalance::params::sysv_package,
   $upstart_file_group         = $irqbalance::params::upstart_file_group,
   $upstart_file_mode          = $irqbalance::params::upstart_file_mode,
   $upstart_file_owner         = $irqbalance::params::upstart_file_owner,
   $upstart_init_source        = $irqbalance::params::upstart_init_source,
+  $upstart_init_template      = $irqbalance::params::upstart_init_template,
   $upstart_package            = $irqbalance::params::upstart_package,
   $use_systemd_on_debian      = $irqbalance::params::use_systemd_on_debian,
   $use_upstart_on_debian      = $irqbalance::params::use_upstart_on_debian,
@@ -54,73 +57,137 @@ class irqbalance (
 
   # Use Upstart on RHEL6 was selected
   if ($use_upstart_on_rhel6 and $::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^6\.(\d+)/) {
+
+    $service_provider = 'upstart'
+
     if !($args_regex) {
       $arguments_regex = '^(--banirq=.+|--banscript=.+|--debug|--hintpolicy=.+|--powerthresh=.+)$'
     }
-    $svc_provider = 'upstart'
-    if !($upstart_init_source) {
-      $upstart_init_src = 'template(irqbalance/init/upstart/el6-irqbalance.conf.erb)'
+
+    if !($upstart_init_template) {
+      $init_template = 'irqbalance/init/upstart/el6-irqbalance.conf.erb'
     }
+
   }
+
   # Use Upstart on Debian 6 was selected
-  elsif (($use_upstart_on_debian or $use_upstart_on_debian6) and $::osfamily == Debian and $::operatingsystemrelease =~ /^6\.(\d+)/) {
+  if (($use_upstart_on_debian or $use_upstart_on_debian6) and $::osfamily == Debian and $::operatingsystemrelease =~ /^6\.(\d+)/) {
+
+    $service_provider = 'upstart'
+
     if !($args_regex) {
       $arguments_regex = ''
     }
-    $svc_provider = 'upstart'
-    if !($upstart_init_source) {
-      $upstart_init_src = 'template(irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb)'
+
+    if !($upstart_init_template) {
+      $init_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
     }
+
   }
 
   # Use systemd on Debian 7 was selected
-  elsif ($use_systemd_on_debian and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
+  if ($use_systemd_on_debian and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
+
+    $service_provider = 'systemd'
+
     if !(args_regex) {
       $arguments_regex = '^(--hintpolicy=.+|--powerthresh=.+)$'
     }
-    $svc_provider = 'systemd'
-    if !($systemd_init_source) {
-      $systemd_init_src = 'template(irqbalance/init/systemd/without-foreground-irqbalance.service.erb)'
+
+    if !($systemd_init_template) {
+      $init_template = 'irqbalance/init/systemd/without-foreground-irqbalance.service.erb'
     }
   }
 
   # Use Upstart on Debian 7 selected
   elsif (($use_upstart_on_debian or $use_upstart_on_debian7) and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
+
+    $service_provider = 'upstart'
+
     if !(args_regex) {
       $arguments_regex = '^(--hintpolicy=.+|--powerthresh=.+)$'
     }
-    $svc_provider = 'upstart'
-    if !($upstart_init_source) {
-      $upstart_init_src = 'template(irqbalance/init/upstart/debian-without-foreground-irqbalance.conf.erb)'
+
+    if !($upstart_init_template) {
+      $init_template = 'irqbalance/init/upstart/debian-without-foreground-irqbalance.conf.erb'
     }
   }
 
   else {
+
     $arguments_regex = $args_regex
-    $systemd_init_src = $systemd_init_source
-    $sysv_init_src = $sysv_init_source
-    $upstart_init_src = $upstart_init_source
+    $service_provider = $svc_provider
+
+    $init_template = $svc_provider ? {
+      'debian'  => $sysv_init_template,
+      'openrc'  => $sysv_init_template,
+      'redhat'  => $sysv_init_template,
+      'systemd' => $systemd_init_template,
+      'upstart' => $upstart_init_template,
+      default   => $sysv_init_template,
+    }
+
+  }
+
+  case $service_provider {
+    'debian': {
+      $init_file_group    = $sysv_file_group
+      $init_file_mode     = $sysv_file_mode
+      $init_file_owner    = $sysv_file_owner
+      $init_file_path     = "/etc/init.d/${irqbalance::service_name}"
+      $init_file_source   = $sysv_init_source
+    }
+    'openrc': {
+      $init_file_group  = $sysv_file_group
+      $init_file_mode   = $sysv_file_mode
+      $init_file_owner  = $sysv_file_owner
+      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
+      $init_file_source = $sysv_init_source
+    }
+    'redhat': {
+      $init_file_group  = $sysv_file_group
+      $init_file_mode   = $sysv_file_mode
+      $init_file_owner  = $sysv_file_owner
+      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
+      $init_file_source = $sysv_init_source
+    }
+    'systemd': {
+      $init_file_group  = $systemd_file_group
+      $init_file_mode   = $systemd_file_mode
+      $init_file_owner  = $systemd_file_owner
+      $init_file_path   = "${irqbalance::systemd_service_dir}/${irqbalance::service_name}.service"
+      $init_file_source = $systemd_init_source
+
+      file { $systemd_service_dir:
+        ensure  => 'directory',
+        group   => 'root',
+        mode    => '2755',
+      }
+
+    }
+    'upstart': {
+      $init_file_group  = $upstart_file_group
+      $init_file_mode   = $upstart_file_mode
+      $init_file_owner  = $upstart_file_owner
+      $init_file_path   = "/etc/init/${irqbalance::service_name}"
+      $init_file_source = $upstart_init_source
+    }
+    default: {
+      fail('An unknown Puppet service_provider parameter was provided')
+    }
   }
 
   validate_absolute_path($config)
   validate_string($config_file_group)
   validate_re($config_file_mode, '[0-7]{3}', 'An invalid config_file_mode value was provided.')
   validate_string($config_file_owner)
-  validate_string($config_template_source)
+  validate_string($config_template)
   validate_string($package_ensure)
   validate_array($package_name)
   validate_bool($service_enable)
   validate_re($service_ensure, '^(running|stopped|true|false)$', 'The service_ensure value was invalid.')
   validate_bool($service_manage)
   validate_string($service_name)
-
-  # If a irqbalance configuration file has been provided, use it. Otherwise
-  # use a template.
-  $config_file_src = $config_file_source ? {
-    true => $config_file_source,
-    false => "template(${config_template_source})",
-    default => "template(${config_template_source})",
-  }
 
   if !($config_file_source) {
 

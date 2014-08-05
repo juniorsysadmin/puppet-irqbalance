@@ -9,10 +9,10 @@ class irqbalance::params {
   $banned_cpus                = undef
   $banned_interrupts          = undef
   $banscript                  = undef
-  $config_file_source         = undef
   $config_file_group          = '0'
   $config_file_mode           = '0644'
   $config_file_owner          = '0'
+  $config_file_source         = undef
   $debug                      = false
   $deepestcache               = undef
   $hintpolicy                 = undef
@@ -29,13 +29,16 @@ class irqbalance::params {
   $systemd_file_mode          = '0644'
   $systemd_file_owner         = '0'
   $systemd_init_source        = undef
+  $systemd_init_template      = undef
   $sysv_file_group            = '0'
   $sysv_file_owner            = '0'
   $sysv_file_mode             = '0755'
   $sysv_init_source           = undef
+  $sysv_init_template         = undef
   $upstart_file_group         = '0'
   $upstart_file_mode          = '0644'
   $upstart_file_owner         = '0'
+  $upstart_init_source        = undef
 
   case $::osfamily {
     'RedHat': {
@@ -57,7 +60,7 @@ class irqbalance::params {
 
       if ($::operatingsystemrelease =~ /^5\.(\d+)/) {
         $args_regex = ''
-        $config_template_source = 'irqbalance/config/el5-irqbalance.erb'
+        $config_template = 'irqbalance/config/el5-irqbalance.erb'
         $service_provider = 'redhat'
       }
 
@@ -75,7 +78,7 @@ class irqbalance::params {
       elsif ($::operatingsystemrelease =~ /^6\.(\d+)/) {
         $args_regex = '^(--banirq=.+|--banscript=.+|--hintpolicy=.+|--powerthresh=.+)$'
         $service_provider = 'redhat'
-        $config_template_source = 'irqbalance/config/el6-irqbalance.erb'
+        $config_template = 'irqbalance/config/el6-irqbalance.erb'
         $use_upstart_on_rhel6   = false
       }
 
@@ -91,7 +94,7 @@ class irqbalance::params {
 
       elsif (($::operatingsystem == 'Fedora') and ($::operatingsystemrelease > '18')) {
         $args_regex = '^(--banirq=.+|--debug|--deepestcache=.+|--hintpolicy=.+|--pid=.+|--policyscript=.+|--powerthresh=.+)$'
-        $config_template_source = 'irqbalance/config/fc-irqbalance.erb'
+        $config_template = 'irqbalance/config/fc-irqbalance.erb'
         $service_provider = 'systemd'
       }
 
@@ -101,14 +104,14 @@ class irqbalance::params {
     }
 
     'Debian': {
-      $config              = '/etc/default/irqbalance'
-      $package_name        = [ 'irqbalance' ]
-      $service_name        = 'irqbalance'
-      $systemd_package     = [ 'systemd-sysv' ]
-      $systemd_service_dir = '/lib/systemd/system'
-      $sysv_package        = [ 'sysvinit' ]
-      $upstart_package     = [ 'upstart']
+      $config                 = '/etc/default/irqbalance'
+      $package_name           = [ 'irqbalance' ]
+      $service_name           = 'irqbalance'
+      $systemd_service_dir    = '/lib/systemd/system'
+      $sysv_package           = [ 'sysvinit' ]
+      $upstart_package        = [ 'upstart']
       $use_systemd_on_debian  = false
+      $use_systemd_on_ubuntu  = false
       $use_upstart_on_debian  = false
 
       # Debian Squeeze
@@ -122,7 +125,7 @@ class irqbalance::params {
 
       if ($::operatingsystemrelease =~ /^6\.(\d+)/) {
         $args_regex = ''
-        $config_template_source = 'irqbalance/config/debian.erb'
+        $config_template = 'irqbalance/config/debian.erb'
         $service_provider = 'debian'
         $use_upstart_on_debian6 = false
       }
@@ -146,8 +149,9 @@ class irqbalance::params {
 
       elsif ($::operatingsystemrelease =~ /^7\.(\d+)/) {
         $args_regex= '^(--hintpolicy=.+|--powerthresh=.+)$'
-        $config_template_source = 'irqbalance/config/debian.erb'
+        $config_template = 'irqbalance/config/debian.erb'
         $service_provider = 'debian'
+        $systemd_package = [ 'systemd-sysv' ]
         $use_upstart_on_debian7 = false
       }
 
@@ -161,9 +165,9 @@ class irqbalance::params {
 
       elsif ($::operatingsystemrelease =~ /^10.04$/) {
         $args_regex = ''
-        $config_template_source = 'irqbalance/config/debian.erb'
+        $config_template = 'irqbalance/config/debian.erb'
         $service_provider = 'upstart'
-        $upstart_init_source = 'template(irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb)'
+        $upstart_init_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
       }
 
       # Ubuntu Precise 12.04 LTS
@@ -176,9 +180,9 @@ class irqbalance::params {
 
       elsif ($::operatingsystemrelease =~ /^12.04$/) {
         $args_regex = ''
-        $config_template_source = 'irqbalance/config/debian.erb'
+        $config_template = 'irqbalance/config/debian.erb'
         $service_provider = 'upstart'
-        $upstart_init_source = 'template(irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb)'
+        $upstart_init_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
       }
 
       # Ubuntu Trusty 14.04
@@ -191,10 +195,11 @@ class irqbalance::params {
       # IRQBALANCE_DEBUG IRQBALANCE_ONESHOT
 
       elsif ($::operatingsystemrelease =~ /^14.04$/) {
-        $config_template_source = 'irqbalance/debian-10x.erb'
+        $config_template = 'irqbalance/debian-10x.erb'
         $args_regex = '^(--banirq=.+|--debug|--hintpolicy=.+|--pid=.+|--policyscript=.+|--powerthresh=.+)$'
         $service_provider = 'upstart'
-        $upstart_init_source = 'template(irqbalance/init/upstart/debian-with-foreground-irqbalance.conf.erb)'
+        $systemd_package = [ 'systemd-services' ]
+        $upstart_init_template = 'irqbalance/init/upstart/debian-with-foreground-irqbalance.conf.erb'
       }
 
       else {
