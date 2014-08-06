@@ -1,10 +1,10 @@
 # == Class: irqbalance::initscripts
 #
-# Module to install custom initscripts for irqbalance.
+# Class to install init scripts for irqbalance
 #
 class irqbalance::initscripts inherits irqbalance {
 
-  if !($irqbalance::prefer_default_init_script) {
+  if ($irqbalance::prefer_default_init_script == false) {
 
     if ($irqbalance::init_file_source) {
 
@@ -18,7 +18,7 @@ class irqbalance::initscripts inherits irqbalance {
 
     }
 
-    else {
+    elsif ($irqbalance::init_template) {
 
       file { $irqbalance::init_file_path:
         ensure  => file,
