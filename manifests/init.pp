@@ -1,5 +1,16 @@
 # == Class: irqbalance
-
+#
+# This module installs and manages the irqbalance daemon. It will accept any
+# option or environment variable that irqbalance supports and will simply
+# ignore anything not supported by the default irqbalance version that comes
+# with the distribution.
+#
+# === Usage
+#
+# include '::irqbalance'
+#
+# See the README.md for the full list of parameters
+#
 class irqbalance (
   $affinity_mask              = $irqbalance::params::affinity_mask,
   $args_regex                 = $irqbalance::params::args_regex,
@@ -27,8 +38,8 @@ class irqbalance (
   $service_enable             = $irqbalance::params::service_enable,
   $service_ensure             = $irqbalance::params::service_ensure,
   $service_manage             = $irqbalance::params::service_manage,
-  $svc_provider               = $irqbalance::params::service_provider,
   $service_name               = $irqbalance::params::service_name,
+  $svc_provider               = $irqbalance::params::service_provider,
   $systemd_file_group         = $irqbalance::params::systemd_file_group,
   $systemd_file_mode          = $irqbalance::params::systemd_file_mode,
   $systemd_file_owner         = $irqbalance::params::systemd_file_owner,
@@ -128,11 +139,11 @@ class irqbalance (
 
   case $service_provider {
     'debian': {
-      $init_file_group    = $sysv_file_group
-      $init_file_mode     = $sysv_file_mode
-      $init_file_owner    = $sysv_file_owner
-      $init_file_path     = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source   = $sysv_init_source
+      $init_file_group  = $sysv_file_group
+      $init_file_mode   = $sysv_file_mode
+      $init_file_owner  = $sysv_file_owner
+      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
+      $init_file_source = $sysv_init_source
     }
     'openrc': {
       $init_file_group  = $sysv_file_group
@@ -175,20 +186,31 @@ class irqbalance (
   }
 
   validate_absolute_path($config)
-  validate_string($config_file_group)
-  validate_re($config_file_mode, '[0-7]{3}', 'An invalid config_file_mode value was provided.')
+  validate_re($config_file_mode, '[0-7]{3,4}', 'An invalid config file mode value was provided.')
   validate_string($config_file_owner)
-  validate_string($config_template)
+  validate_re($init_file_mode, '[0-7]{3,4}', 'An invalid init file mode value was provided.')
+  validate_absolute_path($init_file_path)
+
+  if ($init_file_source) {
+    validate_string($init_file_source)
+  }
+
+  if ($init_template) {
+    validate_string($init_template)
+  }
+
   validate_string($package_ensure)
   validate_array($package_name)
+  validate_bool($prefer_default_init_script)
   validate_bool($service_enable)
   validate_re($service_ensure, '^(running|stopped|true|false)$', 'The service_ensure value was invalid.')
   validate_bool($service_manage)
   validate_string($service_name)
+  validate_string($service_provider)
 
   if !($config_file_source) {
 
-    # Validate the variables for the configuration file if using a template
+    # Validate the environment variables for the configuration file if using a template
 
     if ($affinity_mask) {
       validate_array($affinity_mask)
@@ -212,7 +234,8 @@ class irqbalance (
       validate_re($oneshot, '^yes$', 'If the oneshot value is given it must be set to yes.')
     }
 
-    # If a full set of arguments/options is given, each option is not validated
+    # If a full set of options have been provided, each option will not be validated
+
     if ($args) {
       validate_string($args)
       $arguments = $args
@@ -220,7 +243,7 @@ class irqbalance (
 
     else {
 
-      # Check each irqbalance argument/option
+      # Check each irqbalance option that has been provided
 
       if ($banirq) {
         validate_array($banirq)
@@ -266,7 +289,16 @@ class irqbalance (
       }
 
       # Join all the option-related parameters into an array and check if it is empty
-      $arg_array = [$banirq_string, $banscript, $debug_string, $deepestcache, $hintpolicy, $pid, $policyscript, $powerthresh,]
+      $arg_array = [
+        $banirq_string,
+        $banscript,
+        $debug_string,
+        $deepestcache,
+        $hintpolicy,
+        $pid,
+        $policyscript,
+        $powerthresh,
+      ]
       $arg_values = join($arg_array)
 
       if (empty($arg_values)) {
