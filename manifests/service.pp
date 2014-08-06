@@ -7,6 +7,7 @@ class irqbalance::service inherits irqbalance {
   # irqbalance runs, then terminates for these scenarios.
   # Ignore service_ensure => 'running' as we don't want Puppet to start
   # irqbalance each Puppet run
+
   if ($irqbalance::oneshot == 'yes' or $::physicalprocessorcount == '1') {
     $service_ensure = 'stopped'
   }
