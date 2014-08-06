@@ -1,7 +1,5 @@
 # == Class: irqbalance::install
 #
-# Module to install irqbalance.
-#
 class irqbalance::install inherits irqbalance {
 
   package { 'irqbalance':
