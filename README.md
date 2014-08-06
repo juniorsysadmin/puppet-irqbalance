@@ -93,7 +93,7 @@ class { '::irqbalance':
 
 The following parameters are available in the irqbalance module:
 
-### Environment variables for the configuration file&58
+#### Environment variables for the configuration file:
 
 #### `affinity_mask`
 
@@ -116,7 +116,7 @@ If set, must be set to 'yes'. `service_ensure` will be forced to 'stopped' if
 set.
 eg. oneshot => 'yes',
 
-### Options passed to the service&58
+#### Options passed to the service:
 
 #### `banirq`
 
@@ -155,7 +155,7 @@ eg. policyscript => '/path/to/policyscript.sh',
 
 eg. powerthresh => '2',
 
-### Other parameters&58
+#### Other parameters:
 
 #### `args`
 
