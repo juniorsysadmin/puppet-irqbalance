@@ -91,8 +91,6 @@ class { '::irqbalance':
 
 ### Parameters
 
-The following parameters are available in the irqbalance module:
-
 #### Environment variables for the configuration file:
 
 #### `affinity_mask`
