@@ -31,8 +31,8 @@ class irqbalance::params {
   $systemd_init_source        = undef
   $systemd_init_template      = undef
   $sysv_file_group            = '0'
-  $sysv_file_owner            = '0'
   $sysv_file_mode             = '0755'
+  $sysv_file_owner            = '0'
   $sysv_init_source           = undef
   $sysv_init_template         = undef
   $upstart_file_group         = '0'
