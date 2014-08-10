@@ -65,6 +65,10 @@ class irqbalance (
 
   # Use Upstart on RHEL6 was selected
   if ($use_upstart_on_rhel6 and $::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^6\.(\d+)/) {
+    # See PUP-876
+    if ( versioncmp(::puppetversion, '3.5.0') < 0 ) {
+      fail('Using the Upstart service on RedHat is only supported on Puppet 3.5.0 and above')
+    }
 
     $service_provider = 'upstart'
 
@@ -79,7 +83,7 @@ class irqbalance (
   }
 
   # Use Upstart on Debian 6 was selected
-  if (($use_upstart_on_debian or $use_upstart_on_debian6) and $::osfamily == Debian and $::operatingsystemrelease =~ /^6\.(\d+)/) {
+  elsif (($use_upstart_on_debian or $use_upstart_on_debian6) and $::osfamily == Debian and $::operatingsystemrelease =~ /^6\.(\d+)/) {
 
     $service_provider = 'upstart'
 
@@ -94,7 +98,7 @@ class irqbalance (
   }
 
   # Use systemd on Debian 7 was selected
-  if ($use_systemd_on_debian and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
+  elsif ($use_systemd_on_debian and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
 
     $service_provider = 'systemd'
 
@@ -107,7 +111,7 @@ class irqbalance (
     }
   }
 
-  # Use Upstart on Debian 7 selected
+  # Use Upstart on Debian 7 was selected
   elsif (($use_upstart_on_debian or $use_upstart_on_debian7) and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
 
     $service_provider = 'upstart'
@@ -177,7 +181,7 @@ class irqbalance (
       $init_file_group  = $upstart_file_group
       $init_file_mode   = $upstart_file_mode
       $init_file_owner  = $upstart_file_owner
-      $init_file_path   = "/etc/init/${irqbalance::service_name}"
+      $init_file_path   = "/etc/init/${irqbalance::service_name}.conf"
       $init_file_source = $upstart_init_source
     }
     default: {
@@ -327,9 +331,25 @@ class irqbalance (
     }
   }
 
-  anchor { 'irqbalance::begin': } ->
-  class { '::irqbalance::install': } ->
-  class { '::irqbalance::config': } ~>
+  anchor { 'irqbalance::begin':
+    before => Class['::irqbalance::install'],
+  }
+
+  class { '::irqbalance::install':
+    before => [
+    Class['::irqbalance::config'],
+    Class['::irqbalance::initscripts'],
+    ],
+  }
+
+  class { '::irqbalance::config':
+    notify => Class['::irqbalance::service'],
+  }
+
+  class { '::irqbalance::initscripts':
+    notify => Class['::irqbalance::service'],
+  }
+
   class { '::irqbalance::service': } ->
   anchor { 'irqbalance::end': }
 
