@@ -14,9 +14,30 @@ option or environment variable that irqbalance supports and will simply ignore
 anything not supported by the default irqbalance version that comes with the
 distribution.
 
+Additionally, it supports non-default init types for managing the irqbalance
+service, allowing you to use the same configuration set across multiple
+distributions that have been migrated to the same init. For example, Debian 7,
+Ubuntu 14.04 and Fedora running systemd.
+
+#### Choice of init type and managing the irqbalance service
+
+Many distributions include init scripts which do not support the full set of
+options that the installed irqbalance version itself supports. This module
+will replace these init files with ones which support passing most options to
+the irqbalance service, regardless of the init type used.
+
+This module will generally replace the init file installed if the distribution
+uses Upstart as the default init, or if a non-default init type is chosen via a
+parameter.
+
+If you would prefer that this module left init files unmanaged and untouched,
+use the `prefer_default_init_script` parameter. Note that some distributions
+support using systemd or Upstart as init, but do not provide either a systemd
+service file or an Upstart init file as part of the package.
+
 By default:
 - CentOS/RHEL5 will use SysV init scripts.
-- CentOS/RHEL6 will use SysV init scripts (but can use Upstart).
+- CentOS/RHEL6 will use SysV init scripts (but can use Upstart on Puppet 3.5.x).
 - Fedora will use systemd.
 - Debian 6 will use SysV init scripts (but can use Upstart).
 - Debian 7 will use SysV init scripts (but can use Upstart or systemd).
@@ -26,14 +47,12 @@ By default:
 - Gentoo will use OpenRC.
 
 If using non-default init scripts, this module will assume that all of the
-required Init packages are already installed:
-- Redhat will require the systemd/upstart package.
-- Debian will require the systemd-sysv/upstart package.
-- Ubuntu will require the systemd-services package.
+required init packages are already installed. For example:
+- CentOS/RHEL6 will require the systemd or upstart package.
+- Debian will require the systemd-sysv or upstart package.
+- Ubuntu will require the systemd-services package for systemd.
 
-The Upstart init scripts that come with Ubuntu sadly do not support options,
-so this module replaces them with Upstart init scripts which do. If you would
-rather that it did not, use the `prefer_default_init_script` parameter.
+This module currently adds or replaces init files but _never_ removes them.
 
 [![Build
 Status](https://secure.travis-ci.org/juniorsysadmin/puppet-irqbalance.png)](http://travis-ci.org/juniorsysadmin/puppet-irqbalance)
@@ -267,12 +286,12 @@ Owner for SysV-like init scripts. Defaults to '0'.
 #### `sysv_init_source`
 
 Used for providing your own irqbalance init script for systems using SysV-like
-Init.
+init.
 
 #### `sysv_init_template`
 
 Determines which init script template Puppet should use for systems using
-SysV-like Init.
+SysV-like init.
 
 #### `upstart_file_group`
 
@@ -295,9 +314,38 @@ Used for providing your own irqbalance init script for systems using Upstart.
 Determines which init script template Puppet should use for systems using
 Upstart.
 
+#### `use_systemd_on_debian`
+
+Determines whether to use systemd init scripts on Debian (when possible) to
+manage the service.
+
+#### `use_systemd_on_ubuntu`
+
+Determines whether to use systemd init scripts on Ubuntu (when possible) to
+manage the service.
+
+#### `use_upstart_on_debian`
+
+Determines whether to use Upstart init scripts on Debian to manage the service.
+
+#### `use_upstart_on_debian6`
+
+Determines whether to use Upstart init scripts on Debian 6 to manage the
+service.
+
+#### `use_upstart_on_debian7`
+
+Determines whether to use Upstart init scripts on Debian 7 to manage the
+service.
+
+#### `use_upstart_on_rhel6`
+
+Determines whether to use Upstart init scripts on CentOS/RHEL6 to manage the
+service.
+
 ## Limitations
 
-This module has received limited testing on:
+This module has received very limited testing on:
 
 * CentOS/RHEL 5/6
 * Debian 6/7
