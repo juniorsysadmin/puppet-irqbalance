@@ -2,12 +2,12 @@
 #Configuration for the irqbalance daemon
 
 #Should irqbalance be enabled?
-ENABLED=<% if @service_enable == true %>1<% else %>0<% end %>
+ENABLED=<% if @service_enable %>1<% else %>0<% end %>
 #Balance the IRQs only once?
 ONESHOT="<% if @oneshot -%>1<% else %>0<% end -%>"
-<% if @banned_cpus != nil -%>
+<% if @banned_cpus -%>
 IRQBALANCE_BANNED_CPUS="<%= @banned_cpus_args %>"
 <% end -%>
-<% if @arguments != nil -%>
-OPTIONS="<%= @arguments %>"
+<% if @real_args -%>
+OPTIONS="<%= @real_args %>"
 <% end -%>

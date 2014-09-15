@@ -9,7 +9,7 @@
 # after starting, wait for a minute, then look at the interrupt
 # load and balance it once; after balancing exit and do not change
 # it again.
-<% if @oneshot != nil -%>
+<% if @oneshot -%>
 IRQBALANCE_ONESHOT=<%= @oneshot %>
 <% else -%>
 #IRQBALANCE_ONESHOT=
@@ -22,7 +22,7 @@ IRQBALANCE_ONESHOT=<%= @oneshot %>
 # corresponding bits set to one in this mask will not have any
 # irq's assigned to them on rebalance
 #
-<% if @banned_cpus != nil -%>
+<% if @banned_cpus -%>
 IRQBALANCE_BANNED_CPUS="<%= @banned_cpus_args %>"
 <% else -%>
 #IRQBALANCE_BANNED_CPUS=
@@ -32,8 +32,8 @@ IRQBALANCE_BANNED_CPUS="<%= @banned_cpus_args %>"
 # IRQBALANCE_ARGS
 # append any args here to the irqbalance daemon as documented in the man page
 #
-<% if @arguments != nil -%>
-IRQBALANCE_ARGS="<%= @arguments %>"
+<% if @real_args -%>
+IRQBALANCE_ARGS="<%= @real_args %>"
 <% else -%>
 #IRQBALANCE_ARGS=
 <% end -%>

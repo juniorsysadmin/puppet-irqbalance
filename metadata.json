@@ -1,19 +1,14 @@
 {
-  "author": "Ben Spiccia",
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": "\u003e\u003d 3.0.0"
-    }
-  ],
-  "description": "This module installs and configures the irqbalance daemon. It ignores options not supported by the irqbalance version that comes with the distribution.",
-  "license": "Apache License, Version 2.0",
   "name": "juniorsysadmin-irqbalance",
-  "operatingsystem_support": [],
-  "project_page": "https://github.com/juniorsysadmin/puppet-irqbalance",
-  "requirements": [],
+  "version": "0.0.4",
+  "author": "Ben Spiccia",
+  "summary": "Puppet module for installing and managing irqbalance",
+  "license": "Apache License, Version 2.0",
   "source": "git://github.com/juniorsysadmin/puppet-irqbalance.git",
-  "summary": "Module for installing and configuring the irqbalance daemon",
-  "tags": [],
-  "version": "0.0.1"
+  "project_page": "https://github.com/juniorsysadmin/puppet-irqbalance",
+  "issues_url": "https://github.com/juniorsysadmin/puppet-irqbalance/issues",
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
+  ]
 }
+

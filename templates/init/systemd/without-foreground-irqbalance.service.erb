@@ -4,9 +4,9 @@ Description=irqbalance daemon
 After=syslog.target
 
 [Service]
-EnvironmentFile=<%= @config %>
+EnvironmentFile=<%= @config_dir_path -%>/<%= @config_file_name -%>
 Type=forking
-ExecStart=/usr/sbin/irqbalance $ONESHOT
+ExecStart=<%= @irqbalance_path -%> $ONESHOT
 
 [Install]
 WantedBy=multi-user.target

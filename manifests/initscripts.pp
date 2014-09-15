@@ -4,28 +4,28 @@
 #
 class irqbalance::initscripts inherits irqbalance {
 
-  if ($irqbalance::prefer_default_init_script == false) {
+  if ($irqbalance::manage_init_script_file) {
 
-    if ($irqbalance::init_file_source) {
+    if ($irqbalance::init_script_file_source) {
 
-      file { $irqbalance::init_file_path:
+      file { $irqbalance::init_script_file_path:
         ensure => file,
-        source => $irqbalance::init_file_source,
-        group  => $irqbalance::init_file_group,
-        mode   => $irqbalance::init_file_mode,
-        owner  => $irqbalance::init_file_owner,
+        group  => $irqbalance::init_script_file_group,
+        mode   => $irqbalance::init_script_file_mode,
+        owner  => $irqbalance::init_script_file_owner,
+        source => $irqbalance::init_script_file_source,
       }
 
     }
 
-    elsif ($irqbalance::init_template) {
+    else {
 
-      file { $irqbalance::init_file_path:
+      file { $irqbalance::init_script_file_path:
         ensure  => file,
-        content => template($irqbalance::init_template),
-        group   => $irqbalance::init_file_group,
-        mode    => $irqbalance::init_file_mode,
-        owner   => $irqbalance::init_file_owner,
+        content => template($irqbalance::init_script_file_template),
+        group   => $irqbalance::init_script_file_group,
+        mode    => $irqbalance::init_script_file_mode,
+        owner   => $irqbalance::init_script_file_owner,
       }
 
     }

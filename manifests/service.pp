@@ -11,20 +11,20 @@ class irqbalance::service inherits irqbalance {
   # however.
 
   if ($irqbalance::oneshot == 'yes' or $::processorcount == '1') {
-    $service_ensure = 'stopped'
+    $real_service_ensure = 'stopped'
   }
 
   else {
-    $service_ensure = $irqbalance::service_ensure
+    $real_service_ensure = $irqbalance::service_ensure
   }
 
-  if ($irqbalance::service_manage == true) {
+  if ($irqbalance::service_manage) {
 
     service { 'irqbalance':
-      ensure      => $service_ensure,
-      enable      => $irqbalance::service_enable,
-      name        => $irqbalance::service_name,
-      provider    => $irqbalance::service_provider,
+      ensure   => $real_service_ensure,
+      enable   => $irqbalance::service_enable,
+      name     => $irqbalance::service_name,
+      provider => $irqbalance::service_provider,
     }
 
   }

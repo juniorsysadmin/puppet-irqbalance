@@ -3,6 +3,7 @@ require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 
 PuppetLint.configuration.send("disable_80chars")
+PuppetLint.configuration.relative = true
 PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
 PuppetLint.configuration.fail_on_warnings = true
 
@@ -12,7 +13,6 @@ PuppetLint.configuration.send('disable_class_parameter_defaults')
 # http://puppet-lint.com/checks/class_inherits_from_params_class/
 PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 PuppetLint.configuration.ignore_paths = ["pkg/**/*", "vendor/**/*", "spec/**/*",]
-
 PuppetSyntax.exclude_paths = ["pkg/**/*", "vendor/**/*", "spec/**/*",]
 
 desc "Run acceptance tests"
@@ -24,5 +24,4 @@ desc "Run syntax, lint, and spec tests."
 task :test => [
   :syntax,
   :lint,
-  :spec,
 ]

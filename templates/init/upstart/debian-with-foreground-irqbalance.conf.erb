@@ -11,7 +11,7 @@ start on runlevel [2345]
 stop on runlevel [!2345]
 
 script 
-	test -f <%= @config %> && . <%= @config %>
+	test -f <%= @config_dir_path -%>/<%= @config_file_name -%> && . <%= @config_dir_path -%>/<%= @config_file_name -%>
 
 	test "$ENABLED" != "0" || exit 0
 
@@ -19,6 +19,6 @@ script
 		DOPTIONS="--oneshot"
 	fi
 
-	exec /usr/sbin/irqbalance  $DOPTIONS $OPTIONS --foreground
+	exec <%= @irqbalance_path -%>  $DOPTIONS $OPTIONS --foreground
 
 end script

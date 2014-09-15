@@ -2,9 +2,13 @@
 #
 class irqbalance::install inherits irqbalance {
 
-  package { 'irqbalance':
-    ensure => $irqbalance::package_ensure,
-    name   => $irqbalance::package_name,
+  if $irqbalance::package_manage {
+
+    package { 'irqbalance':
+      ensure => $irqbalance::package_ensure,
+      name   => $irqbalance::package_name,
+    }
+  
   }
 
 }

@@ -1,5 +1,7 @@
 # irqbalance
 
+[![Build Status](https://secure.travis-ci.org/juniorsysadmin/puppet-irqbalance.png)](http://travis-ci.org/juniorsysadmin/puppet-irqbalance)
+
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -14,48 +16,41 @@ option or environment variable that irqbalance supports and will simply ignore
 anything not supported by the default irqbalance version that comes with the
 distribution.
 
-Additionally, it supports non-default init types for managing the irqbalance
-service, allowing you to use the same configuration set across multiple
-distributions that have been migrated to the same init. For example, Debian 7,
-Ubuntu 14.04 and Fedora running systemd.
+Additionally, it supports using systemd as the init type for managing the
+irqbalance service, allowing you to use the same configuration set across
+multiple distributions that have been migrated to systemd. For example,
+Debian 7 and Fedora both running systemd.
 
-#### Choice of init type and managing the irqbalance service
+#### Init scripts
 
-Many distributions include init scripts which do not support the full set of
-options that the installed irqbalance version itself supports. This module
-will replace these init files with ones which support passing most options to
-the irqbalance service, regardless of the init type used.
+A few distributions include init scripts which do not support the full set of
+options that the installed irqbalance version itself supports.
 
-This module will generally replace the init file installed if the distribution
-uses Upstart as the default init, or if a non-default init type is chosen via a
-parameter.
+Some include an init script which does not allow options to be passed to the
+irqbalance daemon at all. Other distributions can use systemd as the Init, but
+do not come with a systemd service file for irqbalance.
 
-If you would prefer that this module left init files unmanaged and untouched,
-use the `prefer_default_init_script` parameter. Note that some distributions
-support using systemd or Upstart as init, but do not provide either a systemd
-service file or an Upstart init file as part of the package.
+If `manage_init_script_file` is set to `true`, this module will generally
+provide a sensible init script. Additionally, if you wish to provide your own
+init script you can do so with the appropriate parameter.
+eg. `upstart_init_script_file_source` or `systemd_init_script_file_template`.
 
 By default:
 - CentOS/RHEL5 will use SysV init scripts.
-- CentOS/RHEL6 will use SysV init scripts (but can use Upstart on Puppet 3.5.x).
+- CentOS/RHEL6 will use SysV init scripts.
+- CentOS/RHEL7 will use systemd.
 - Fedora will use systemd.
-- Debian 6 will use SysV init scripts (but can use Upstart).
-- Debian 7 will use SysV init scripts (but can use Upstart or systemd).
+- Debian 6 will use SysV init scripts.
+- Debian 7 will use SysV init scripts (but can use systemd).
 - Ubuntu 10.04 will use Upstart.
 - Ubuntu 12.04 will use Upstart.
 - Ubuntu 14.04 will use Upstart (but can use systemd).
 - Gentoo will use OpenRC.
 
-If using non-default init scripts, this module will assume that all of the
-required init packages are already installed. For example:
-- CentOS/RHEL6 will require the systemd or upstart package.
-- Debian will require the systemd-sysv or upstart package.
-- Ubuntu will require the systemd-services package for systemd.
-
-This module currently adds or replaces init files but _never_ removes them.
-
-[![Build
-Status](https://secure.travis-ci.org/juniorsysadmin/puppet-irqbalance.png)](http://travis-ci.org/juniorsysadmin/puppet-irqbalance)
+If you wish to manage the irqbalance service with systemd, where systemd is
+not the default Init, you will need to use the `prefer_systemd` parameter.
+When `prefer_systemd` is set to `true` this module assumes that systemd is the
+currently running Init and all systemd related packages have been installed.
 
 ## Usage
 
@@ -75,7 +70,8 @@ class { '::irqbalance':
 ```
 
 Set all of the irqbalance options at once:
-(These won't be checked to see if this irqbalance version supports them all.)
+(These won't be checked to see if the installed irqbalance version supports
+them)
 
 ```puppet
 class { '::irqbalance':
@@ -83,12 +79,12 @@ class { '::irqbalance':
 }
 ```
 
-Use systemd when running on Debian 7 or Upstart when running on a RHEL6 system:
+Use systemd init scripts when running on Debian 7:
 
 ```puppet
 class { '::irqbalance':
-  use_systemd_on_debian => true,
-  use_upstart_on_rhel6  => true,
+  manage_init_script_file => true,
+  prefer_systemd => true,
 }
 ```
 
@@ -154,6 +150,11 @@ eg. debug => true,
 
 eg. deepestcache => '2',
 
+#### `dependency_class`
+
+Determines whether to include a dependency class for this irqbalance module.
+eg. dependency_class => 'irqbalance_deps',
+
 #### `hintpolicy`
 
 eg. hintpolicy => 'exact',
@@ -177,20 +178,8 @@ eg. powerthresh => '2',
 #### `args`
 
 Options that will passed to irqbalance, in the same way that one would do
-it from the command line. If this parameter is set all of the option parameters
-above, if set, will be ignored.
+it from the command line.
 eg. args => '--powerthresh=2 --deepestcache=2',
-
-#### `config`
-
-Sets the file that the irqbalance configuration is written into.
-eg. config => '/etc/irqbalance.conf',
-
-#### `config_file_source`
-
-Used for providing your own irqbalance configuration file.
-Needs to follow the same requirements as the Puppet File source attribute.
-eg. config_file_source => 'puppet:///modules/irqbalance/config/irq.conf',
 
 #### `config_file_group`
 
@@ -200,31 +189,45 @@ Group for the irqbalance configuration file. Defaults to '0'.
 
 Mode for the irqbalance configuration file. Defaults to '0644'.
 
+#### `config_file_name`
+
+The filename that the irqbalance configuration is written into.
+
 #### `config_file_owner`
 
 Owner for the irqbalance configuration file. Defaults to '0'.
 
-#### `config_template`
+#### `config_file_source`
+
+Used for providing your own irqbalance configuration file.
+Needs to follow the same requirements as the Puppet File source attribute.
+eg. config_file_source => 'puppet:///modules/irqbalance/config/irq.conf',
+
+#### `config_file_template`
 
 Determines which template Puppet should use for the irqbalance configuration.
 
+#### `manage_init_script_file`
+
+Determines whether to manage init scripts. Defaults to `false`. It is
+recommended that this be set to `true` to ensure that you can use most
+available options that irqbalance supports. This will also need to be set to
+`true` if the distribution does not provide one for systemd. For example,
+Debian Wheezy.
+
 #### `package_ensure`
 
-Sets the irqbalance package to be installed. Can be set to 'present',
+Sets the irqbalance package to be installed. Can be set to `present`,
 'latest', or a specific version.
 
-#### `package_name`
+#### `package_manage`
 
-Determines the name of the package to install. Must be an array.
-eg. package_name = [ 'irqbalance' ],
+Determines whether to manage the irqbalance package. Defaults to `true`.
 
-#### `prefer_default_init_script`
+#### `prefer_systemd
 
-In certain cases, this module replaces the distribution-provided init scripts
-with its own, so that irqbalance options don't get ignored. If you would prefer
-that these be left alone, set this to 'true'. This also means that this module
-won't create a relevant init file, even if the distribution does not provide
-one. For example, on Debian Wheezy running systemd.
+Determines whether to use systemd init scripts on certain Debian or Ubuntu
+distributions.
 
 #### `service_enable`
 
@@ -240,55 +243,46 @@ if running on a single processor system, or if `oneshot` = 'yes'.
 Selects whether Puppet should manage the service.
 eg. service_manage => false
 
-#### `service_name`
-
-Selects the name of the irqbalance service for Puppet to manage.
-
-#### `systemd_file_group`
+#### `systemd_init_script_file_group`
 
 Group for the systemd init service file. Defaults to '0'.
 
-#### `systemd_file_mode`
+#### `systemd_init_script_file_mode`
 
 Mode for the systemd init service file. Defaults to '0644'.
 
-#### `systemd_file_owner`
+#### `systemd_init_script_file_owner`
 
 Owner for the systemd init service file. Defaults to '0'.
 
-#### `systemd_init_source`
+#### `systemd_init_script_file_source`
 
 Used for providing your own irqbalance systemd service file for systems using
 systemd.
 
-#### `systemd_init_template`
+#### `systemd_init_script_file_template`
 
 Determines which systemd service template Puppet should use for systems using
 systemd.
 
-#### `systemd_service_dir`
-
-Determines the directory into which the systemd service file should be
-installed.
-
-#### `sysv_file_group`
+#### `sysv_init_script_file_group`
 
 Group for SysV-like init scripts. Defaults to '0'.
 
-#### `sysv_file_mode`
+#### `sysv_init_script_file_mode`
 
 Mode for SysV-like init scripts. Defaults to '0755'.
 
-#### `sysv_file_owner`
+#### `sysv_init_script_file_owner`
 
 Owner for SysV-like init scripts. Defaults to '0'.
 
-#### `sysv_init_source`
+#### `sysv_init_script_file_source`
 
 Used for providing your own irqbalance init script for systems using SysV-like
 init.
 
-#### `sysv_init_template`
+#### `sysv_init_script_file_template`
 
 Determines which init script template Puppet should use for systems using
 SysV-like init.
@@ -297,62 +291,33 @@ SysV-like init.
 
 Group for Upstart init scripts. Defaults to '0'.
 
-#### `upstart_file_mode`
+#### `upstart_init_script_file_mode`
 
 Mode for Upstart init scripts. Defaults to '0644'.
 
-#### `upstart_file_owner`
+#### `upstart_init_script_file_owner`
 
 Owner for Upstart init scripts. Defaults to '0'.
 
-#### `upstart_init_source`
+#### `upstart_init_script_file_source`
 
 Used for providing your own irqbalance init script for systems using Upstart.
 
-#### `upstart_init_template`
+#### `upstart_init_script_file_template`
 
 Determines which init script template Puppet should use for systems using
 Upstart.
-
-#### `use_systemd_on_debian`
-
-Determines whether to use systemd init scripts on Debian (when possible) to
-manage the service.
-
-#### `use_systemd_on_ubuntu`
-
-Determines whether to use systemd init scripts on Ubuntu (when possible) to
-manage the service.
-
-#### `use_upstart_on_debian`
-
-Determines whether to use Upstart init scripts on Debian to manage the service.
-
-#### `use_upstart_on_debian6`
-
-Determines whether to use Upstart init scripts on Debian 6 to manage the
-service.
-
-#### `use_upstart_on_debian7`
-
-Determines whether to use Upstart init scripts on Debian 7 to manage the
-service.
-
-#### `use_upstart_on_rhel6`
-
-Determines whether to use Upstart init scripts on CentOS/RHEL6 to manage the
-service.
 
 ## Limitations
 
 This module has received very limited testing on:
 
-* CentOS/RHEL 5/6
+* CentOS/RHEL 5/6/7
 * Debian 6/7
 * Fedora 19/20
 * Ubuntu 10.04/12.04/14.04
 
-against Puppet 2.7 and 3.x
+against Puppet 2.7.x and 3.x
 
 ## Development
 

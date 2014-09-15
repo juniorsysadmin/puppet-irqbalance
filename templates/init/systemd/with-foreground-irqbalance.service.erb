@@ -4,8 +4,8 @@ Description=irqbalance daemon
 After=syslog.target
 
 [Service]
-EnvironmentFile=<%= @config %>
-ExecStart=/usr/sbin/irqbalance --foreground $IRQBALANCE_ARGS
+EnvironmentFile=<%= @config_dir_path -%>/<%= @config_file_name -%>
+ExecStart=<%= @irqbalance_path -%> --foreground $IRQBALANCE_ARGS
 
 [Install]
 WantedBy=multi-user.target

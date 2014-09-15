@@ -12,200 +12,139 @@
 # See the README.md for the full list of parameters
 #
 class irqbalance (
-  $affinity_mask              = $irqbalance::params::affinity_mask,
-  $args_regex                 = $irqbalance::params::args_regex,
-  $args                       = $irqbalance::params::args,
-  $banirq                     = $irqbalance::params::banirq,
-  $banned_cpus                = $irqbalance::params::banned_cpus,
-  $banned_interrupts          = $irqbalance::params::banned_interrupts,
-  $banscript                  = $irqbalance::params::banscript,
-  $config                     = $irqbalance::params::config,
-  $config_file_group          = $irqbalance::params::config_file_group,
-  $config_file_mode           = $irqbalance::params::config_file_mode,
-  $config_file_owner          = $irqbalance::params::config_file_owner,
-  $config_file_source         = $irqbalance::params::config_file_source,
-  $config_template            = $irqbalance::params::config_template,
-  $deepestcache               = $irqbalance::params::deepestcache,
-  $debug                      = $irqbalance::params::debug,
-  $hintpolicy                 = $irqbalance::params::hintpolicy,
-  $oneshot                    = $irqbalance::params::oneshot,
-  $package_ensure             = $irqbalance::params::package_ensure,
-  $package_name               = $irqbalance::params::package_name,
-  $pid                        = $irqbalance::params::pid,
-  $policyscript               = $irqbalance::params::policyscript,
-  $powerthresh                = $irqbalance::params::powerthresh,
-  $prefer_default_init_script = $irqbalance::params::prefer_default_init_script,
-  $service_enable             = $irqbalance::params::service_enable,
-  $service_ensure             = $irqbalance::params::service_ensure,
-  $service_manage             = $irqbalance::params::service_manage,
-  $service_name               = $irqbalance::params::service_name,
-  $svc_provider               = $irqbalance::params::service_provider,
-  $systemd_file_group         = $irqbalance::params::systemd_file_group,
-  $systemd_file_mode          = $irqbalance::params::systemd_file_mode,
-  $systemd_file_owner         = $irqbalance::params::systemd_file_owner,
-  $systemd_init_source        = $irqbalance::params::systemd_init_source,
-  $systemd_init_template      = $irqbalance::params::systemd_init_template,
-  $systemd_service_dir        = $irqbalance::params::systemd_service_dir,
-  $sysv_file_group            = $irqbalance::params::sysv_file_group,
-  $sysv_file_mode             = $irqbalance::params::sysv_file_mode,
-  $sysv_file_owner            = $irqbalance::params::sysv_file_owner,
-  $sysv_init_source           = $irqbalance::params::sysv_init_source,
-  $sysv_init_template         = $irqbalance::params::sysv_init_template,
-  $upstart_file_group         = $irqbalance::params::upstart_file_group,
-  $upstart_file_mode          = $irqbalance::params::upstart_file_mode,
-  $upstart_file_owner         = $irqbalance::params::upstart_file_owner,
-  $upstart_init_source        = $irqbalance::params::upstart_init_source,
-  $upstart_init_template      = $irqbalance::params::upstart_init_template,
-  $use_systemd_on_debian      = $irqbalance::params::use_systemd_on_debian,
-  $use_upstart_on_debian      = $irqbalance::params::use_upstart_on_debian,
-  $use_upstart_on_rhel6       = $irqbalance::params::use_upstart_on_rhel6,
+  $affinity_mask                     = $irqbalance::params::affinity_mask,
+  $args                              = $irqbalance::params::args,
+  $args_regex                        = $irqbalance::params::args_regex,
+  $banirq                            = $irqbalance::params::banirq,
+  $banned_cpus                       = $irqbalance::params::banned_cpus,
+  $banned_interrupts                 = $irqbalance::params::banned_interrupts,
+  $banscript                         = $irqbalance::params::banscript,
+  $config_dir_path                   = $irqbalance::params::config_dir_path,
+  $config_file_group                 = $irqbalance::params::config_file_group,
+  $config_file_mode                  = $irqbalance::params::config_file_mode,
+  $config_file_name                  = $irqbalance::params::config_file_name,
+  $config_file_owner                 = $irqbalance::params::config_file_owner,
+  $config_file_source                = $irqbalance::params::config_file_source,
+  $config_file_template              = $irqbalance::params::config_file_template,
+  $deepestcache                      = $irqbalance::params::deepestcache,
+  $debug                             = $irqbalance::params::debug,
+  $dependency_class                  = $irqbalance::params::dependency_class,
+  $hintpolicy                        = $irqbalance::params::hintpolicy,
+  $irqbalance_path                   = $irqbalance::params::irqbalance_path,
+  $manage_init_script_file           = $irqbalance::params::manage_init_script_file,
+  $oneshot                           = $irqbalance::params::oneshot,
+  $package_ensure                    = $irqbalance::params::package_ensure,
+  $package_manage                    = $irqbalance::params::package_manage,
+  $package_name                      = $irqbalance::params::package_name,
+  $pid                               = $irqbalance::params::pid,
+  $policyscript                      = $irqbalance::params::policyscript,
+  $powerthresh                       = $irqbalance::params::powerthresh,
+  $prefer_systemd                    = $irqbalance::params::prefer_systemd,
+  $service_enable                    = $irqbalance::params::service_enable,
+  $service_ensure                    = $irqbalance::params::service_ensure,
+  $service_manage                    = $irqbalance::params::service_manage,
+  $service_name                      = $irqbalance::params::service_name,
+  $service_provider                  = $irqbalance::params::service_provider,
+  $systemd_dir_path                  = $irqbalance::params::systemd_dir_path,
+  $systemd_init_script_file_group    = $irqbalance::params::systemd_init_script_file_group,
+  $systemd_init_script_file_mode     = $irqbalance::params::systemd_init_script_file_mode,
+  $systemd_init_script_file_owner    = $irqbalance::params::systemd_init_script_file_owner,
+  $systemd_init_script_file_source   = $irqbalance::params::systemd_init_script_file_source,
+  $systemd_init_script_file_template = $irqbalance::params::systemd_init_script_file_template,
+  $sysv_init_script_file_group       = $irqbalance::params::sysv_init_script_file_group,
+  $sysv_init_script_file_mode        = $irqbalance::params::sysv_init_script_file_mode,
+  $sysv_init_script_file_owner       = $irqbalance::params::sysv_init_script_file_owner,
+  $sysv_init_script_file_source      = $irqbalance::params::sysv_init_script_file_source,
+  $sysv_init_script_file_template    = $irqbalance::params::sysv_init_script_file_template,
+  $upstart_init_script_file_group    = $irqbalance::params::upstart_init_script_file_group,
+  $upstart_init_script_file_mode     = $irqbalance::params::upstart_init_script_file_mode,
+  $upstart_init_script_file_owner    = $irqbalance::params::upstart_init_script_file_owner,
+  $upstart_init_script_file_source   = $irqbalance::params::upstart_init_script_file_source,
+  $upstart_init_script_file_template = $irqbalance::params::upstart_init_script_file_template,
 ) inherits irqbalance::params {
+
+  if $dependency_class {
+    require $dependency_class
+  }
 
   # Non-default Init logic
 
-  # Use Upstart on RHEL6 was selected
-  if ($use_upstart_on_rhel6 and $::osfamily == 'RedHat' and $::operatingsystemrelease =~ /^6\.(\d+)/) {
-    # See PUP-876
-    if ( versioncmp(::puppetversion, '3.5.0') < 0 ) {
-      fail('Using the Upstart service on RedHat is only supported on Puppet 3.5.0 and above')
+  # Debian 7
+  if ($::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
+    
+    if ($prefer_systemd) {
+      $real_service_provider = 'systemd'
     }
 
-    $service_provider = 'upstart'
-
-    if !($args_regex) {
-      $arguments_regex = '^(--banirq=.+|--banscript=.+|--debug|--hintpolicy=.+|--powerthresh=.+)$'
+    else {
+      $real_service_provider = 'debian'
     }
 
-    if !($upstart_init_template) {
-      $init_template = 'irqbalance/init/upstart/el6-irqbalance.conf.erb'
-    }
-
-  }
-
-  # Use Upstart on Debian 6 was selected
-  elsif (($use_upstart_on_debian or $use_upstart_on_debian6) and $::osfamily == Debian and $::operatingsystemrelease =~ /^6\.(\d+)/) {
-
-    $service_provider = 'upstart'
-
-    if !($args_regex) {
-      $arguments_regex = ''
-    }
-
-    if !($upstart_init_template) {
-      $init_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
-    }
-
-  }
-
-  # Use systemd on Debian 7 was selected
-  elsif ($use_systemd_on_debian and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
-
-    $service_provider = 'systemd'
-
-    if !(args_regex) {
-      $arguments_regex = '^(--hintpolicy=.+|--powerthresh=.+)$'
-    }
-
-    if !($systemd_init_template) {
-      $init_template = 'irqbalance/init/systemd/without-foreground-irqbalance.service.erb'
-    }
-  }
-
-  # Use Upstart on Debian 7 was selected
-  elsif (($use_upstart_on_debian or $use_upstart_on_debian7) and $::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
-
-    $service_provider = 'upstart'
-
-    if !(args_regex) {
-      $arguments_regex = '^(--hintpolicy=.+|--powerthresh=.+)$'
-    }
-
-    if !($upstart_init_template) {
-      $init_template = 'irqbalance/init/upstart/debian-without-foreground-irqbalance.conf.erb'
-    }
   }
 
   else {
-
-    $arguments_regex = $args_regex
-    $service_provider = $svc_provider
-
-    $init_template = $svc_provider ? {
-      'debian'  => $sysv_init_template,
-      'openrc'  => $sysv_init_template,
-      'redhat'  => $sysv_init_template,
-      'systemd' => $systemd_init_template,
-      'upstart' => $upstart_init_template,
-      default   => $sysv_init_template,
-    }
-
+    $real_service_provider = $service_provider
   }
 
-  case $service_provider {
-    'debian': {
-      $init_file_group  = $sysv_file_group
-      $init_file_mode   = $sysv_file_mode
-      $init_file_owner  = $sysv_file_owner
-      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source = $sysv_init_source
-    }
-    'openrc': {
-      $init_file_group  = $sysv_file_group
-      $init_file_mode   = $sysv_file_mode
-      $init_file_owner  = $sysv_file_owner
-      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source = $sysv_init_source
-    }
-    'redhat': {
-      $init_file_group  = $sysv_file_group
-      $init_file_mode   = $sysv_file_mode
-      $init_file_owner  = $sysv_file_owner
-      $init_file_path   = "/etc/init.d/${irqbalance::service_name}"
-      $init_file_source = $sysv_init_source
+  $init_script_file_template = $real_service_provider ? {
+    /(debian|openrc|redhat)/ => $sysv_init_script_file_template,
+    'systemd'                => $systemd_init_script_file_template,
+    'upstart'                => $upstart_init_script_file_template,
+    default                  => $sysv_init_script_file_template,
+  }
+
+  case $real_service_provider {
+    /(debian|openrc|redhat)/: {
+      $init_script_file_group  = $sysv_init_script_file_group
+      $init_script_file_mode   = $sysv_init_script_file_mode
+      $init_script_file_owner  = $sysv_init_script_file_owner
+      $init_script_file_path   = "/etc/init.d/${irqbalance::service_name}"
+      $init_script_file_source = $sysv_init_script_file_source
     }
     'systemd': {
-      $init_file_group  = $systemd_file_group
-      $init_file_mode   = $systemd_file_mode
-      $init_file_owner  = $systemd_file_owner
-      $init_file_path   = "${irqbalance::systemd_service_dir}/${irqbalance::service_name}.service"
-      $init_file_source = $systemd_init_source
+      $init_script_file_group  = $systemd_init_script_file_group
+      $init_script_file_mode   = $systemd_init_script_file_mode
+      $init_script_file_owner  = $systemd_init_script_file_owner
+      $init_script_file_path   = "${irqbalance::systemd_dir_path}/${irqbalance::service_name}.service"
+      $init_script_file_source = $systemd_init_script_file_source
 
-      file { $systemd_service_dir:
-        ensure  => 'directory',
-        group   => 'root',
-        mode    => '2755',
+      file { $systemd_dir_path:
+        ensure => 'directory',
+        group  => 'root',
+        mode   => '2755',
       }
 
     }
     'upstart': {
-      $init_file_group  = $upstart_file_group
-      $init_file_mode   = $upstart_file_mode
-      $init_file_owner  = $upstart_file_owner
-      $init_file_path   = "/etc/init/${irqbalance::service_name}.conf"
-      $init_file_source = $upstart_init_source
+      $init_script_file_group  = $upstart_init_script_file_group
+      $init_script_file_mode   = $upstart_init_script_file_mode
+      $init_script_file_owner  = $upstart_init_script_file_owner
+      $init_script_file_path   = "/etc/init/${irqbalance::service_name}.conf"
+      $init_script_file_source = $upstart_init_script_file_source
     }
     default: {
       fail('An unknown Puppet service_provider parameter was provided')
     }
   }
 
-  validate_absolute_path($config)
+  validate_absolute_path($config_dir_path)
   validate_re($config_file_mode, '[0-7]{3,4}', 'An invalid config file mode value was provided.')
   validate_string($config_file_owner)
-  validate_re($init_file_mode, '[0-7]{3,4}', 'An invalid init file mode value was provided.')
-  validate_absolute_path($init_file_path)
+  validate_re($init_script_file_mode, '[0-7]{3,4}', 'An invalid init file mode value was provided.')
+  validate_absolute_path($init_script_file_path)
 
-  if ($init_file_source) {
-    validate_string($init_file_source)
+  if ($init_script_file_source) {
+    validate_string($init_script_file_source)
   }
 
-  if ($init_template) {
-    validate_string($init_template)
+  if ($init_script_file_template) {
+    validate_string($init_script_file_template)
   }
 
   validate_string($package_ensure)
+  validate_bool($package_manage)
   validate_array($package_name)
-  validate_bool($prefer_default_init_script)
+  validate_bool($manage_init_script_file)
   validate_bool($service_enable)
   validate_re($service_ensure, '^(running|stopped|true|false)$', 'The service_ensure value was invalid.')
   validate_bool($service_manage)
@@ -255,8 +194,6 @@ class irqbalance (
         $banirq_withopt = prefix($banirq, '--banirq=')
         $banirq_args = join($banirq_withopt, ' ')
         validate_re($banirq_args, '^(--banirq=\d{2}(\s--banirq=\d{2})*)$', 'One or more invalid banirq values were provided.')
-        # Used for a value check below
-        $banirq_string = join($banirq)
       }
 
       if ($banscript) {
@@ -287,47 +224,30 @@ class irqbalance (
         validate_re($powerthresh, '[\d]+', 'The powerthresh option value must be an integer.')
       }
 
-      $debug_string = $debug ? {
+      $real_debug_string = $debug ? {
         true    => '--debug',
-        default => undef,
+        default => '',
       }
 
-      # Join all the option-related parameters into an array and check if it is empty
-      $arg_array = [
-        $banirq_string,
-        $banscript,
-        $debug_string,
-        $deepestcache,
-        $hintpolicy,
-        $pid,
-        $policyscript,
-        $powerthresh,
-      ]
-      $arg_values = join($arg_array)
+      # Join options together only if the irqbalance version on this
+      # operating system accepts them
+      $arg_commands = [
+        $banirq_args,
+        "--banscript=${banscript}",
+        $real_debug_string,
+        "--deepestcache=${deepestcache}",
+        "--hintpolicy=${hintpolicy}",
+        "--pid=${pid}",
+        "--policyscript=${policyscript}",
+        "--powerthresh=${powerthresh}",
+        ]
 
-      if (empty($arg_values)) {
-        # Do nothing
+      $acceptable_args = grep($arg_commands, $args_regex)
+
+      if !empty($acceptable_args) {
+        $real_args = join($acceptable_args, ' ')
       }
 
-      else {
-        # Join options together only if the irqbalance version on this
-        # operating system accepts them
-        $arg_commands = [
-          $banirq_args,
-          "--banscript=${banscript}",
-          $debug_string,
-          "--deepestcache=${deepestcache}",
-          "--hintpolicy=${hintpolicy}",
-          "--pid=${pid}",
-          "--policyscript=${policyscript}",
-          "--powerthresh=${powerthresh}",
-          ]
-        $acceptable_args = grep($arg_commands, $arguments_regex)
-
-        if !(empty($acceptable_args)) {
-          $arguments = join($acceptable_args, ' ')
-        }
-      }
     }
   }
 
