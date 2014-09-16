@@ -72,7 +72,7 @@ class irqbalance (
   # Debian 7
   if ($::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
     
-    if ($prefer_systemd) {
+    if $prefer_systemd {
       $real_service_provider = 'systemd'
     }
 
@@ -151,23 +151,23 @@ class irqbalance (
   validate_string($service_name)
   validate_string($service_provider)
 
-  if !($config_file_source) {
+  if !$config_file_source {
 
     # Validate the environment variables for the configuration file if using a template
 
-    if ($affinity_mask) {
+    if $affinity_mask {
       validate_array($affinity_mask)
       $affinity_mask_args = join($affinity_mask, ',')
       validate_re($affinity_mask_args, '^([0-9a-fA-F]+(,[0-9a-fA-F]+)*)$', 'An invalid affinity_mask value was provided.')
     }
 
-    if ($banned_cpus) {
+    if $banned_cpus {
       validate_array($banned_cpus)
       $banned_cpus_args = join($banned_cpus, ',')
       validate_re($banned_cpus_args, '^([0-9a-fA-F]+(,[0-9a-fA-F]+)*)$', 'An invalid banned_cpu value was provided.')
     }
 
-    if ($banned_interrupts) {
+    if $banned_interrupts {
       validate_array($banned_interrupts)
       $banned_interrupts_args = join($banned_interrupts, ' ')
       validate_re($banned_interrupts_args, '^(\d{2}(\s\d{2})*)$', 'One or more invalid banned_interrupts values were provided.')
@@ -177,7 +177,7 @@ class irqbalance (
 
     # If a full set of options have been provided, each option will not be validated
 
-    if ($args) {
+    if $args {
       validate_string($args)
       $arguments = $args
     }
@@ -186,7 +186,7 @@ class irqbalance (
 
       # Check each irqbalance option that has been provided
 
-      if ($banirq) {
+      if $banirq {
         validate_array($banirq)
         # The banirq irqbalance option is additive only
         $banirq_withopt = prefix($banirq, '--banirq=')
@@ -194,31 +194,31 @@ class irqbalance (
         validate_re($banirq_args, '^(--banirq=\d{2}(\s--banirq=\d{2})*)$', 'One or more invalid banirq values were provided.')
       }
 
-      if ($banscript) {
+      if $banscript {
         validate_absolute_path($banscript)
       }
 
-      if ($deepestcache) {
+      if $deepestcache {
         validate_re($deepestcache, '[1-9]\d*', 'The deepestcache option value must be a positive integer.')
       }
 
-      if ($debug) {
+      if $debug {
         validate_bool($debug)
       }
 
-      if ($hintpolicy) {
+      if $hintpolicy {
         validate_re($hintpolicy, '^(exact|subset|ignore)$', 'The hintpolicy option value must be either exact, subset or ignore.')
       }
 
-      if ($pid) {
+      if $pid {
         validate_absolute_path($pid)
       }
 
-      if ($policyscript) {
+      if $policyscript {
         validate_absolute_path($policyscript)
       }
 
-      if ($powerthresh) {
+      if $powerthresh {
         validate_re($powerthresh, '[\d]+', 'The powerthresh option value must be an integer.')
       }
 

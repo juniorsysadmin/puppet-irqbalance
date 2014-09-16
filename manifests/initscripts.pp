@@ -4,9 +4,9 @@
 #
 class irqbalance::initscripts inherits irqbalance {
 
-  if ($irqbalance::manage_init_script_file) {
+  if $irqbalance::manage_init_script_file {
 
-    if ($irqbalance::init_script_file_source) {
+    if $irqbalance::init_script_file_source {
 
       file { $irqbalance::init_script_file_path:
         ensure => file,

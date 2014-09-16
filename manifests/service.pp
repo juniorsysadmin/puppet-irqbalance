@@ -10,15 +10,15 @@ class irqbalance::service inherits irqbalance {
   # irqbalance will still exit almost immediately on shared cache systems
   # however.
 
-  if ($irqbalance::oneshot == 'yes') {
+  if $irqbalance::oneshot == 'yes' {
     $oneshot_set = true
   }
 
-  if ($::processorcount == '1') {
+  if $::processorcount == '1' {
     $singleprocessor = true
   }
 
-  $ignore_service_ensure = ($irqbalance::bool_oneshot or $singleprocessor)
+  $ignore_service_ensure = $irqbalance::bool_oneshot or $singleprocessor
 
   $real_service_ensure = $ignore_service_ensure ? {
     true    => undef,

@@ -2,7 +2,7 @@
 #
 class irqbalance::config inherits irqbalance {
 
-  if ($irqbalance::config_file_source) {
+  if $irqbalance::config_file_source {
 
     file { "${irqbalance::config_dir_path}/${irqbalance::config_file_name}":
       ensure => file,
