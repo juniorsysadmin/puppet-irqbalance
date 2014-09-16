@@ -30,7 +30,7 @@ Some include an init script which does not allow options to be passed to the
 irqbalance daemon at all. Other distributions can use systemd as the Init, but
 do not come with a systemd service file for irqbalance.
 
-If `manage_init_script_file` is set to `true`, this module will generally
+If `manage_init_script_file` is set to true, this module will generally
 provide a sensible init script. Additionally, if you wish to provide your own
 init script you can do so with the appropriate parameter.
 eg. `upstart_init_script_file_source` or `systemd_init_script_file_template`.
@@ -121,11 +121,11 @@ eg. banned_cpus => ['fc3', '0000001'],
 #### `banned_interrupts`
 
 Must be an array.
-eg. banned_interrupts => ['33f', '3d'],
+eg. banned_interrupts => ['01', '03'],
 
 #### `oneshot`
 
-Can be set to `yes`, but accepts most boolean forms. If set, the
+Can be set to 'yes', but accepts most boolean forms. If set, the
 `service_ensure` parameter will be ignored.
 eg. oneshot => 'yes',
 
@@ -209,10 +209,10 @@ Determines which template Puppet should use for the irqbalance configuration.
 
 #### `manage_init_script_file`
 
-Determines whether to manage init scripts. Defaults to `false`. It is
-recommended that this be set to `true` to ensure that you can use most
+Determines whether to manage init scripts. Defaults to false. It is
+recommended that this be set to true to ensure that you can use most
 available options that irqbalance supports. This will also need to be set to
-`true` if the distribution does not provide one for systemd. For example,
+true if the distribution does not provide one for systemd. For example,
 Debian Wheezy.
 
 #### `package_ensure`
@@ -222,9 +222,9 @@ Sets the irqbalance package to be installed. Can be set to `present`,
 
 #### `package_manage`
 
-Determines whether to manage the irqbalance package. Defaults to `true`.
+Determines whether to manage the irqbalance package. Defaults to true.
 
-#### `prefer_systemd
+#### `prefer_systemd`
 
 Determines whether to use systemd init scripts on certain Debian or Ubuntu
 distributions.
