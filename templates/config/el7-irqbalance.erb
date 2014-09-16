@@ -9,8 +9,8 @@
 # after starting, wait for a minute, then look at the interrupt
 # load and balance it once; after balancing exit and do not change
 # it again.
-<% if @oneshot -%>
-IRQBALANCE_ONESHOT=<%= @oneshot %>
+<% if @bool_oneshot -%>
+IRQBALANCE_ONESHOT=yes
 <% else -%>
 #IRQBALANCE_ONESHOT=
 <% end -%>

@@ -7,8 +7,8 @@
 #    after starting, wait for a minute, then look at the interrupt
 #    load and balance it once; after balancing exit and do not change
 #    it again.
-<% if @oneshot -%>
-ONESHOT=<%= @oneshot %>
+<% if @bool_oneshot -%>
+ONESHOT=yes
 <% else -%>
 #ONESHOT=
 <% end -%>

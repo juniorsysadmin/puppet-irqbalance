@@ -4,7 +4,7 @@
 #Should irqbalance be enabled?
 ENABLED=<% if @service_enable %>1<% else %>0<% end %>
 #Balance the IRQs only once?
-ONESHOT="<% if @oneshot -%>1<% else %>0<% end -%>"
+ONESHOT="<% if @bool_oneshot -%>1<% else %>0<% end -%>"
 <% if @banned_interrupts -%>
 IRQBALANCE_BANNED_INTERRUPTS="<%= @banned_interrupts_args %>"
 <% end -%>

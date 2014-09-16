@@ -18,7 +18,7 @@ class irqbalance::params {
   $deepestcache                      = undef
   $hintpolicy                        = undef
   $manage_init_script_file           = false
-  $oneshot                           = undef
+  $oneshot                           = false
   $package_ensure                    = 'present'
   $package_manage                    = true
   $pid                               = undef

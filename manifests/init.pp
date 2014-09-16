@@ -173,9 +173,7 @@ class irqbalance (
       validate_re($banned_interrupts_args, '^(\d{2}(\s\d{2})*)$', 'One or more invalid banned_interrupts values were provided.')
     }
 
-    if ($oneshot) {
-      validate_re($oneshot, '^yes$', 'If the oneshot value is given it must be set to yes.')
-    }
+    $bool_oneshot = str2bool($oneshot)
 
     # If a full set of options have been provided, each option will not be validated
 

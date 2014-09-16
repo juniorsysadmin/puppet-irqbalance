@@ -125,8 +125,8 @@ eg. banned_interrupts => ['33f', '3d'],
 
 #### `oneshot`
 
-If set, must be set to 'yes'. `service_ensure` will be forced to 'stopped' if
-set.
+Can be set to `yes`, but accepts most boolean forms. If set, the
+`service_ensure` parameter will be ignored.
 eg. oneshot => 'yes',
 
 #### Options passed to the service:
@@ -236,7 +236,7 @@ Determines if the service should be enabled at boot.
 #### `service_ensure`
 
 Determines if the service should be running or not. This parameter is ignored
-if running on a single processor system, or if `oneshot` = 'yes'.
+if running on a single processor system, or if `oneshot` is set to 'yes'.
 
 #### `service_manage`
 
