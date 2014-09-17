@@ -28,7 +28,7 @@ class irqbalance::service inherits irqbalance {
   if $irqbalance::service_manage {
 
     if $ignore_service_ensure {
-      notice("${module_name}: Single processor or \$oneshot parameter detected - \$service_ensure parameter will be ignored.")
+      notice("${module_name}: Single processor or oneshot parameter detected - service_ensure will be ignored.")
     }
 
     service { 'irqbalance':

@@ -125,7 +125,7 @@ eg. banned_interrupts => ['01', '03'],
 
 #### `oneshot`
 
-Can be set to 'yes', but accepts most boolean forms. If set, the
+Can be set to 'yes', but accepts most boolean forms as a string. If set, the
 `service_ensure` parameter will be ignored.
 eg. oneshot => 'yes',
 
