@@ -10,15 +10,15 @@ class irqbalance::initscripts inherits irqbalance {
 
       file { $irqbalance::init_script_file_path:
         ensure => file,
+        source => $irqbalance::init_script_file_source,
         group  => $irqbalance::init_script_file_group,
         mode   => $irqbalance::init_script_file_mode,
         owner  => $irqbalance::init_script_file_owner,
-        source => $irqbalance::init_script_file_source,
       }
 
     }
 
-    else {
+    elsif $irqbalance::init_script_file_template {
 
       file { $irqbalance::init_script_file_path:
         ensure  => file,
@@ -26,6 +26,26 @@ class irqbalance::initscripts inherits irqbalance {
         group   => $irqbalance::init_script_file_group,
         mode    => $irqbalance::init_script_file_mode,
         owner   => $irqbalance::init_script_file_owner,
+      }
+
+    }
+
+    # No source or template has been provided.
+    # Only the file permissions of the init script will be managed.
+
+    else {
+
+      exec { 'check_init_script_presence':
+        command => '/bin/false',
+        unless  => "/usr/bin/test -e ${irqbalance::init_script_file_path}",
+      }
+
+      file { $irqbalance::init_script_file_path:
+        ensure  => file,
+        group   => $irqbalance::init_script_file_group,
+        mode    => $irqbalance::init_script_file_mode,
+        owner   => $irqbalance::init_script_file_owner,
+        require => Exec['check_init_script_presence'],
       }
 
     }
