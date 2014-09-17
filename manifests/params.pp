@@ -183,21 +183,20 @@ class irqbalance::params {
       # CentOS/RHEL 7
       # The irqbalance version included with CentOS/RHEL 7 is 1.06
       # The options accepted by this module are: --banirq=, --debug
-      # --deepestcache=, --hintpolicy=, --pid=, --policyscript=,
-      # --powerthresh=,
+      # --hintpolicy=, --pid=, --policyscript=, --powerthresh=,
       # The environment variables accepted by this module are:
       # IRQBALANCE_ARGS IRQBALANCE_BANNED_CPUS IRQBALANCE_ONESHOT
       # The environment variables ignored by this module are: IRQBALANCE_DEBUG
       # The options ignored by this module are: none
 
       elsif $::operatingsystemrelease =~ /^7\.(\d+)/ {
-        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--deepestcache=[1-9]\d*|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
+        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/el7-irqbalance.erb'
         $service_provider = 'systemd'
       }
 
       # Fedora
-      # The irqbalance version included with Fedora 19 is 1.05
+      # The irqbalance version included with Fedora 20 is 1.07
       # The options accepted by this module are: --banirq=, --debug
       # --deepestcache=, --hintpolicy=, --pid=, --policyscript=,
       # --powerthresh=,
@@ -206,7 +205,7 @@ class irqbalance::params {
       # The environment variables ignored by this module are: IRQBALANCE_DEBUG
       # The options ignored by this module are: none
 
-      elsif ($::operatingsystem == 'Fedora') and ($::operatingsystemrelease > '18') {
+      elsif ($::operatingsystem == 'Fedora') and ($::operatingsystemrelease > '19') {
         $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--deepestcache=[1-9]\d*|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/fc-irqbalance.erb'
         $service_provider = 'systemd'
