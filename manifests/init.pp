@@ -66,27 +66,22 @@ class irqbalance (
     require $dependency_class
   }
 
-  $init_script_file_template = $service_provider ? {
-    /(debian|openrc|redhat)/ => $sysv_init_script_file_template,
-    'systemd'                => $systemd_init_script_file_template,
-    'upstart'                => $upstart_init_script_file_template,
-    default                  => $sysv_init_script_file_template,
-  }
-
   case $service_provider {
     /(debian|openrc|redhat)/: {
-      $init_script_file_group  = $sysv_init_script_file_group
-      $init_script_file_mode   = $sysv_init_script_file_mode
-      $init_script_file_owner  = $sysv_init_script_file_owner
-      $init_script_file_path   = "/etc/init.d/${irqbalance::service_name}"
-      $init_script_file_source = $sysv_init_script_file_source
+      $init_script_file_group    = $sysv_init_script_file_group
+      $init_script_file_mode     = $sysv_init_script_file_mode
+      $init_script_file_owner    = $sysv_init_script_file_owner
+      $init_script_file_path     = "/etc/init.d/${irqbalance::service_name}"
+      $init_script_file_source   = $sysv_init_script_file_source
+      $init_script_file_template = $sysv_init_script_file_template
     }
     'systemd': {
-      $init_script_file_group  = $systemd_init_script_file_group
-      $init_script_file_mode   = $systemd_init_script_file_mode
-      $init_script_file_owner  = $systemd_init_script_file_owner
-      $init_script_file_path   = "${irqbalance::systemd_dir_path}/${irqbalance::service_name}.service"
-      $init_script_file_source = $systemd_init_script_file_source
+      $init_script_file_group    = $systemd_init_script_file_group
+      $init_script_file_mode     = $systemd_init_script_file_mode
+      $init_script_file_owner    = $systemd_init_script_file_owner
+      $init_script_file_path     = "${irqbalance::systemd_dir_path}/${irqbalance::service_name}.service"
+      $init_script_file_source   = $systemd_init_script_file_source
+      $init_script_file_template = $systemd_init_script_file_template
 
       file { $systemd_dir_path:
         ensure => 'directory',
@@ -96,11 +91,12 @@ class irqbalance (
 
     }
     'upstart': {
-      $init_script_file_group  = $upstart_init_script_file_group
-      $init_script_file_mode   = $upstart_init_script_file_mode
-      $init_script_file_owner  = $upstart_init_script_file_owner
-      $init_script_file_path   = "/etc/init/${irqbalance::service_name}.conf"
-      $init_script_file_source = $upstart_init_script_file_source
+      $init_script_file_group    = $upstart_init_script_file_group
+      $init_script_file_mode     = $upstart_init_script_file_mode
+      $init_script_file_owner    = $upstart_init_script_file_owner
+      $init_script_file_path     = "/etc/init/${irqbalance::service_name}.conf"
+      $init_script_file_source   = $upstart_init_script_file_source
+      $init_script_file_template = $upstart_init_script_file_template
     }
     default: {
       fail('An unknown Puppet service_provider parameter was provided')
