@@ -61,7 +61,7 @@ class irqbalance::params {
       # The options ignored by this module are: --debug --oneshot
 
       if $::operatingsystemrelease =~ /^6\.(\d+)/ {
-        $args_regex = ''
+        $args_regex = '.^'
         $config_file_template = 'irqbalance/config/debian.erb'
         $service_provider = 'debian'
       }
@@ -96,7 +96,7 @@ class irqbalance::params {
       # The options ignored by this module are: --debug --oneshot
 
       elsif $::operatingsystemrelease =~ /^10.04$/ {
-        $args_regex = ''
+        $args_regex = '.^'
         $config_file_template = 'irqbalance/config/debian.erb'
         $service_provider = 'upstart'
         $upstart_init_script_file_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
@@ -111,7 +111,7 @@ class irqbalance::params {
       # The options ignored by this module are: --debug --oneshot
 
       elsif $::operatingsystemrelease =~ /^12.04$/ {
-        $args_regex = ''
+        $args_regex = '.^'
         $config_file_template = 'irqbalance/config/debian.erb'
         $service_provider = 'upstart'
         $upstart_init_script_file_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
@@ -156,7 +156,7 @@ class irqbalance::params {
       # The options ignored by this module are: --debug --oneshot
 
       if $::operatingsystemrelease =~ /^5\.(\d+)/ {
-        $args_regex = ''
+        $args_regex = '.^'
         $config_file_template = 'irqbalance/config/el5-irqbalance.erb'
         $service_provider = 'redhat'
       }
