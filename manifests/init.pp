@@ -39,7 +39,6 @@ class irqbalance (
   $pid                               = $irqbalance::params::pid,
   $policyscript                      = $irqbalance::params::policyscript,
   $powerthresh                       = $irqbalance::params::powerthresh,
-  $prefer_systemd                    = $irqbalance::params::prefer_systemd,
   $service_enable                    = $irqbalance::params::service_enable,
   $service_ensure                    = $irqbalance::params::service_ensure,
   $service_manage                    = $irqbalance::params::service_manage,
@@ -67,33 +66,14 @@ class irqbalance (
     require $dependency_class
   }
 
-  # Non-default Init logic
-
-  # Debian 7
-  if ($::osfamily == Debian and $::operatingsystemrelease =~ /^7\.(\d+)/) {
-    
-    if $prefer_systemd {
-      $real_service_provider = 'systemd'
-    }
-
-    else {
-      $real_service_provider = 'debian'
-    }
-
-  }
-
-  else {
-    $real_service_provider = $service_provider
-  }
-
-  $init_script_file_template = $real_service_provider ? {
+  $init_script_file_template = $service_provider ? {
     /(debian|openrc|redhat)/ => $sysv_init_script_file_template,
     'systemd'                => $systemd_init_script_file_template,
     'upstart'                => $upstart_init_script_file_template,
     default                  => $sysv_init_script_file_template,
   }
 
-  case $real_service_provider {
+  case $service_provider {
     /(debian|openrc|redhat)/: {
       $init_script_file_group  = $sysv_init_script_file_group
       $init_script_file_mode   = $sysv_init_script_file_mode

@@ -16,19 +16,11 @@ option or environment variable that irqbalance supports and will simply ignore
 anything not supported by the default irqbalance version that comes with the
 distribution.
 
-Additionally, it supports using systemd as the init type for managing the
-irqbalance service, allowing you to use the same configuration set across
-multiple distributions that have been migrated to systemd. For example,
-Debian 7 and Fedora both running systemd.
-
 #### Init scripts
 
-A few distributions include init scripts which do not support the full set of
-options that the installed irqbalance version itself supports.
-
-Some include an init script which does not allow options to be passed to the
-irqbalance daemon at all. Other distributions can use systemd as the Init, but
-do not come with a systemd service file for irqbalance.
+Some distributions (generally Ubuntu) include init scripts which do not
+support the full set of options that the installed irqbalance version itself
+supports.
 
 If `manage_init_script_file` is set to true, this module will generally
 provide a sensible init script. Additionally, if you wish to provide your own
@@ -41,16 +33,15 @@ By default:
 - CentOS/RHEL7 will use systemd.
 - Fedora will use systemd.
 - Debian 6 will use SysV init scripts.
-- Debian 7 will use SysV init scripts (but can use systemd).
+- Debian 7 will use SysV init scripts.
 - Ubuntu 10.04 will use Upstart.
 - Ubuntu 12.04 will use Upstart.
-- Ubuntu 14.04 will use Upstart (but can use systemd).
+- Ubuntu 14.04 will use Upstart.
 - Gentoo will use OpenRC.
 
-If you wish to manage the irqbalance service with systemd, where systemd is
-not the default Init, you will need to use the `prefer_systemd` parameter.
-When `prefer_systemd` is set to `true` this module assumes that systemd is the
-currently running Init and all systemd related packages have been installed.
+Debian 7 and Ubuntu 14.04 support systemd as a non-default Init but note that
+neither come with an irqbalance service unit file. Examples of managing
+irqbalance under systemd on Debian/Ubuntu are shown below.
 
 ## Usage
 
@@ -79,15 +70,6 @@ class { '::irqbalance':
 }
 ```
 
-Use systemd init scripts when running on Debian 7:
-
-```puppet
-class { '::irqbalance':
-  manage_init_script_file => true,
-  prefer_systemd => true,
-}
-```
-
 Set the ONESHOT environment variable:
 
 ```puppet
@@ -101,6 +83,26 @@ Use your own irqbalance configuration file:
 ```puppet
 class { '::irqbalance':
   config_file_source => '/path/to/config',
+}
+```
+
+Manage irqbalance on Debian 7 under systemd (untested):
+
+```puppet
+class { '::irqbalance':
+  $manage_init_script_file => true,
+  $service_provider = 'systemd'
+  $systemd_init_script_file_template = 'irqbalance/init/systemd/without-foreground-irqbalance.service.erb'
+}
+```
+
+Manage irqbalance on Ubuntu 14.04 under systemd (untested):
+
+```puppet
+class { '::irqbalance':
+  $manage_init_script_file => true,
+  $service_provider = 'systemd'
+  $systemd_init_script_file_template = 'irqbalance/init/systemd/with-foreground-irqbalance.service.erb'
 }
 ```
 
@@ -314,7 +316,7 @@ This module has received very limited testing on:
 
 * CentOS/RHEL 5/6/7
 * Debian 6/7
-* Fedora 19/20
+* Fedora 20
 * Ubuntu 10.04/12.04/14.04
 
 against Puppet 2.7.x and 3.x

@@ -48,7 +48,6 @@ class irqbalance::params {
       $config_file_name = 'irqbalance'
       $irqbalance_path  = '/usr/sbin/irqbalance'
       $package_name     = [ 'irqbalance' ]
-      $prefer_systemd   = false
       $service_name     = 'irqbalance'
       $systemd_dir_path = '/lib/systemd/system'
 
@@ -86,7 +85,6 @@ class irqbalance::params {
         $args_regex= '^(--hintpolicy=(exact|subset|ignore)|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/debian.erb'
         $service_provider = 'debian'
-        $systemd_init_script_file_template = 'irqbalance/init/systemd/without-foreground-irqbalance.service.erb'
       }
 
       # Ubuntu Lucid 10.04 LTS
