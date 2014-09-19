@@ -7,6 +7,40 @@
   "source": "git://github.com/juniorsysadmin/puppet-irqbalance.git",
   "project_page": "https://github.com/juniorsysadmin/puppet-irqbalance",
   "issues_url": "https://github.com/juniorsysadmin/puppet-irqbalance/issues",
+  "tags": ["irqbalance", "irq", "rhel", "centos", "debian", "ubuntu", "gentoo"],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "10.04",
+        "12.04",
+        "14.04"
+      ]
+    }
+  ],
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
   ]
