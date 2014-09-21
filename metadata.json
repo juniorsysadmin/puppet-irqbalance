@@ -1,6 +1,6 @@
 {
   "name": "juniorsysadmin-irqbalance",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Ben Spiccia",
   "summary": "Puppet module for installing and managing irqbalance",
   "license": "Apache License, Version 2.0",

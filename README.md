@@ -37,6 +37,7 @@ By default:
 - Ubuntu 10.04 will use Upstart.
 - Ubuntu 12.04 will use Upstart.
 - Ubuntu 14.04 will use Upstart.
+- SLES 11 SP1 will use SysV init scripts.
 - Gentoo will use OpenRC.
 
 Debian 7 and Ubuntu 14.04 support systemd as a non-default Init but note that
