@@ -1,6 +1,6 @@
 {
   "name": "juniorsysadmin-irqbalance",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "author": "Ben Spiccia",
   "summary": "Puppet module for installing and managing irqbalance",
   "license": "Apache License, Version 2.0",
@@ -33,6 +33,12 @@
       ]
     },
     {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11 SP1"
+      ]
+    },
+    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "10.04",
@@ -42,7 +48,19 @@
     }
   ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
+    {
+      "name":"puppetlabs/stdlib",
+      "version_requirement":">= 3.0.0"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">=2.7.20 <4.0.0"
+    }
   ]
 }
-

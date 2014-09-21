@@ -317,6 +317,7 @@ This module has received very limited testing on:
 * CentOS/RHEL 5/6/7
 * Debian 6/7
 * Fedora 20
+* SLES 11 SP1
 * Ubuntu 10.04/12.04/14.04
 
 against Puppet 2.7.x and 3.x

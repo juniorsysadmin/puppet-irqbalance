@@ -62,7 +62,7 @@ class irqbalance::params {
 
       if $::operatingsystemrelease =~ /^6\.(\d+)/ {
         $args_regex = '.^'
-        $config_file_template = 'irqbalance/config/debian.erb'
+        $config_file_template = 'irqbalance/config/debian-irqbalance.erb'
         $service_provider = 'debian'
       }
 
@@ -83,7 +83,7 @@ class irqbalance::params {
 
       elsif $::operatingsystemrelease =~ /^7\.(\d+)/ {
         $args_regex= '^(--hintpolicy=(exact|subset|ignore)|--powerthresh=[\d]+)$'
-        $config_file_template = 'irqbalance/config/debian.erb'
+        $config_file_template = 'irqbalance/config/debian-irqbalance.erb'
         $service_provider = 'debian'
       }
 
@@ -97,7 +97,7 @@ class irqbalance::params {
 
       elsif $::operatingsystemrelease =~ /^10.04$/ {
         $args_regex = '.^'
-        $config_file_template = 'irqbalance/config/debian.erb'
+        $config_file_template = 'irqbalance/config/debian-irqbalance.erb'
         $service_provider = 'upstart'
         $upstart_init_script_file_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
       }
@@ -112,7 +112,7 @@ class irqbalance::params {
 
       elsif $::operatingsystemrelease =~ /^12.04$/ {
         $args_regex = '.^'
-        $config_file_template = 'irqbalance/config/debian.erb'
+        $config_file_template = 'irqbalance/config/debian-irqbalance.erb'
         $service_provider = 'upstart'
         $upstart_init_script_file_template = 'irqbalance/init/upstart/debian-noargs-irqbalance.conf.erb'
       }
@@ -207,6 +207,33 @@ class irqbalance::params {
         $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--deepestcache=[1-9]\d*|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/fc-irqbalance.erb'
         $service_provider = 'systemd'
+      }
+
+      else {
+        fail("The ${module_name} module is not supported on ${::operatingsystem} ${::operatingsystemrelease}.")
+      }
+    }
+
+    'Suse': {
+      $config_dir_path  = '/etc/sysconfig'
+      $config_file_name = 'irqbalance'
+      $irqbalance_path  = '/usr/sbin/irqbalance'
+      $package_name     = [ 'irqbalance' ]
+      $service_name     = 'irq_balancer'
+      $systemd_dir_path = '/lib/systemd/system'
+
+      # SLES 11
+      # The irqbalance version included with SLES 11 is 0.55
+      # The options accepted by this module are: none
+      # The environment variables accepted by this module are:
+      # IRQBALANCE_BANNED_CPUS IRQBALANCE_BANNED_INTERRUPTS ONESHOT
+      # The environment variables ignored by this module are: IRQBALANCE_DEBUG
+      # The options ignored by this module are: --debug --oneshot
+
+      if ($::operatingsystem == 'SLES') and (versioncmp($::operatingsystemrelease, '10') > 0)  {
+        $args_regex = '.^'
+        $config_file_template = 'irqbalance/config/sles11-irqbalance.erb'
+        $service_provider = 'redhat'
       }
 
       else {
