@@ -12,7 +12,6 @@ class irqbalance::params {
   $config_file_group                 = '0'
   $config_file_mode                  = '0644'
   $config_file_owner                 = '0'
-  $config_file_source                = undef
   $debug                             = false
   $dependency_class                  = undef
   $deepestcache                      = undef
