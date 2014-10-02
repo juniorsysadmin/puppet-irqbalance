@@ -153,11 +153,6 @@ eg. debug => true,
 
 eg. deepestcache => '2',
 
-#### `dependency_class`
-
-Determines whether to include a dependency class for this irqbalance module.
-eg. dependency_class => 'irqbalance_deps',
-
 #### `hintpolicy`
 
 eg. hintpolicy => 'exact',
@@ -209,6 +204,11 @@ eg. config_file_source => 'puppet:///modules/irqbalance/config/irq.conf',
 #### `config_file_template`
 
 Determines which template Puppet should use for the irqbalance configuration.
+
+#### `dependency_class`
+
+Determines whether to include a dependency class for this irqbalance module.
+eg. dependency_class => 'irqbalance_deps',
 
 #### `manage_init_script_file`
 
