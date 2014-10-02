@@ -2,18 +2,15 @@ require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 
-PuppetLint.configuration.send("disable_80chars")
-PuppetLint.configuration.relative = true
-PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
-PuppetLint.configuration.fail_on_warnings = true
-
-# Forsake support for Puppet 2.6.2 for the benefit of cleaner code.
-# http://puppet-lint.com/checks/class_parameter_defaults/
-PuppetLint.configuration.send('disable_class_parameter_defaults')
-# http://puppet-lint.com/checks/class_inherits_from_params_class/
+PuppetLint.configuration.fail_on_warnings
+PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.send('disable_class_inherits_from_params_class')
-PuppetLint.configuration.ignore_paths = ["pkg/**/*", "vendor/**/*", "spec/**/*",]
-PuppetSyntax.exclude_paths = ["pkg/**/*", "vendor/**/*", "spec/**/*",]
+PuppetLint.configuration.send('disable_class_parameter_defaults')
+PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
+PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
+
+PuppetSyntax.exclude_paths = ["spec/**/*", "pkg/**/*"]
 
 desc "Run acceptance tests"
 RSpec::Core::RakeTask.new(:acceptance) do |t|

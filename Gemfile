@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 group :test do
   gem "rake"
-  gem "puppet", ENV['PUPPET_VERSION'] || '~> 3.6.0'
+  gem "puppet", ENV['PUPPET_VERSION'] || '~> 3.7.0'
   gem "puppet-lint"
   gem "rspec-puppet", '~> 1.0.1'
   gem "puppet-syntax"
@@ -11,7 +11,6 @@ end
 
 group :development do
   gem "travis"
-  gem "travis-lint"
   gem "beaker"
   gem "beaker-rspec"
   gem "minitest", '~> 4.0'
