@@ -155,7 +155,7 @@ class irqbalance (
 
     if $args {
       validate_string($args)
-      $arguments = $args
+      $real_args = $args
     }
 
     else {
