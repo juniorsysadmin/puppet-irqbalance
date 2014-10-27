@@ -127,7 +127,7 @@ class irqbalance::params {
 
       elsif $::operatingsystemrelease =~ /^14.04$/ {
         $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
-        $config_file_template = 'irqbalance/config/debian-10x.erb'
+        $config_file_template = 'irqbalance/config/debian-10x-irqbalance.erb'
         $service_provider = 'upstart'
         $upstart_init_script_file_template = 'irqbalance/init/upstart/debian-with-foreground-irqbalance.conf.erb'
       }
