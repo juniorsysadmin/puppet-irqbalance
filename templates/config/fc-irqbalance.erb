@@ -23,7 +23,7 @@ IRQBALANCE_ONESHOT=yes
 # irq's assigned to them on rebalance
 #
 <% if @banned_cpus -%>
-IRQBALANCE_BANNED_CPUS=<%= @banned_cpus_args %>
+IRQBALANCE_BANNED_CPUS="<%= @banned_cpus_args %>"
 <% else -%>
 #IRQBALANCE_BANNED_CPUS=
 <% end -%>
