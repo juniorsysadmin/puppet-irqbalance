@@ -126,7 +126,7 @@ class irqbalance::params {
       # IRQBALANCE_DEBUG IRQBALANCE_ONESHOT
 
       elsif $::operatingsystemrelease =~ /^14.04$/ {
-        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
+        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--hintpolicy=(exact|subset|ignore)|--pid=/.+|--policyscript=/.+|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/debian-10x-irqbalance.erb'
         $service_provider = 'upstart'
         $upstart_init_script_file_template = 'irqbalance/init/upstart/debian-with-foreground-irqbalance.conf.erb'
@@ -172,7 +172,7 @@ class irqbalance::params {
       # The options ignored by this module are: --foreground --pid
 
       elsif $::operatingsystemrelease =~ /^6\.(\d+)/ {
-        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--banscript=/.|--hintpolicy=(exact|subset|ignore)|--powerthresh=[\d]+)$'
+        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--banscript=/.+|--hintpolicy=(exact|subset|ignore)|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/el6-irqbalance.erb'
         $service_provider = 'redhat'
       }
@@ -187,7 +187,7 @@ class irqbalance::params {
       # The options ignored by this module are: none
 
       elsif $::operatingsystemrelease =~ /^7\.(\d+)/ {
-        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
+        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--hintpolicy=(exact|subset|ignore)|--pid=/.+|--policyscript=/.+|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/el7-irqbalance.erb'
         $service_provider = 'systemd'
       }
@@ -203,7 +203,7 @@ class irqbalance::params {
       # The options ignored by this module are: none
 
       elsif ($::operatingsystem == 'Fedora') and ($::operatingsystemrelease > '19') {
-        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--deepestcache=[1-9]\d*|--hintpolicy=(exact|subset|ignore)|--pid=/.|--policyscript=/.|--powerthresh=[\d]+)$'
+        $args_regex = '^(--banirq=\d{2}(\s--banirq=\d{2})*|--debug|--deepestcache=[1-9]\d*|--hintpolicy=(exact|subset|ignore)|--pid=/.+|--policyscript=/.+|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/fc-irqbalance.erb'
         $service_provider = 'systemd'
       }
