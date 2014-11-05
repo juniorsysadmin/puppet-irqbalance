@@ -4,15 +4,12 @@
 #
 class irqbalance::service inherits irqbalance {
 
-  # irqbalance runs, then terminates for these scenarios.
-  # Ignore service_ensure => 'running' as we don't want Puppet to start
-  # irqbalance each Puppet run
-  # irqbalance will still exit almost immediately on shared cache systems
-  # however.
-
-  if $irqbalance::oneshot == 'yes' {
-    $oneshot_set = true
-  }
+  # On single processor systems or when oneshot is enabled irqbalance will
+  # run and then terminate.
+  # For these scenarios ignore service_ensure => 'running' as we don't want
+  # Puppet to start irqbalance each Puppet run
+  # Note that the irqbalance will still exit immediately on systems with a
+  # shared cache and this module does not prevent this.
 
   if $::processorcount == '1' {
     $singleprocessor = true
