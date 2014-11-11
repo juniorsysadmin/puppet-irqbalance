@@ -16,18 +16,27 @@ option or environment variable that irqbalance supports and will simply ignore
 anything not supported by the default irqbalance version that comes with the
 distribution.
 
+#### Unmanaged service states
+
+This module will not manage the running state of the irqbalance service when
+applied to a single processor system, or when `oneshot` is set to yes. In
+these scenarios the `service_ensure` parameter is simply ignored.
+
 #### Init scripts
 
-Some distributions (generally Ubuntu) include init scripts which do not
-support the full set of options that the installed irqbalance version itself
-supports.
+The Upstart init script that was included with Ubuntu Trusty Tahr (14.04)
+does not seem to support the full set of options that the installed irqbalance
+version itself supports.
 
 If `manage_init_script_file` is set to true, this module will generally
-provide a sensible init script. Additionally, if you wish to provide your own
-init script you can do so with the appropriate parameter.
+provide a sensible init script replacement for Ubuntu distributions.
+Additionally, if you wish to provide your own init script you can do so by
+passing the appropriate parameter:
 eg. `upstart_init_script_file_source` or `systemd_init_script_file_template`.
 
-By default:
+This module will default to using the following init types to manage the
+service:
+
 - CentOS/RHEL5 will use SysV init scripts.
 - CentOS/RHEL6 will use SysV init scripts.
 - CentOS/RHEL7 will use systemd.
@@ -40,7 +49,7 @@ By default:
 - SLES 11 SP1 will use SysV init scripts.
 - Gentoo will use OpenRC.
 
-Debian 7 and Ubuntu 14.04 support systemd as a non-default Init but note that
+Debian 7 and Ubuntu 14.04 support systemd as a non-default init but note that
 neither come with an irqbalance service unit file. Examples of managing
 irqbalance under systemd on Debian/Ubuntu are shown below.
 
