@@ -128,6 +128,15 @@ describe 'irqbalance', :type => :class do
 
         end
 
+        context 'with the irqbalance service not managed' do
+          let (:params) { { :service_manage => false,} }
+
+          it 'the service resource irqbalance should not be in the catalog' do
+            should_not contain_service('irqbalance')
+          end
+
+        end
+
         # Config file  tests
         context 'with service_enable parameter set to true' do
           let (:params) { { :service_enable => true,} }
@@ -581,6 +590,142 @@ describe 'irqbalance', :type => :class do
 
         end
 
+        context 'with the package_manage parameter set to false' do
+          let (:params) { { :package_manage => false,} }
+
+          it 'the package resource irqbalance should not be in the catalog' do
+            should_not contain_package('irqbalance')
+          end
+
+        end
+
+        # Init script resource tests
+
+        context 'with the manage_init_script_file parameter set to true' do
+          let (:default_params) { { :manage_init_script_file => true, } }
+
+          context 'and sysv_init_script_file_source or upstart_init_script_file set' do
+            let :params do
+              default_params.merge!({
+                :sysv_init_script_file_source => 'puppet://modules/irqbalance/sysv',
+                :upstart_init_script_file_source => 'puppet://modules/irqbalance/upstart',
+              })
+            end
+
+            it 'the init script group should be root' do
+              if operatingsystemrelease < 10.04
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'group' => '0',
+                })
+              else
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'group' => '0',
+                })
+              end
+            end
+
+            it 'the init script owner should be root' do
+              if operatingsystemrelease < 10.04
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'owner' => '0',
+                })
+              else
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'owner' => '0',
+                })
+              end
+            end
+
+            if operatingsystemrelease < 10.04
+              it 'the init script file permissions should be 0755' do
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'mode' => '0755',
+                })
+              end
+            else
+              it 'the init script file permissions should be 0644' do
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'mode' => '0644',
+                })
+              end
+            end
+
+          end
+
+          context 'and *_init_script_file_source not set' do
+            #The *_init_script_file_source parameters default to undef
+            let (:params) { { :manage_init_script_file => true, } }
+          
+            it 'the init script group should be root' do
+              if operatingsystemrelease < 10.04
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'group' => '0',
+                })
+              else
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'group' => '0',
+                })
+              end
+            end
+
+            it 'the init script owner should be root' do
+              if operatingsystemrelease < 10.04
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'owner' => '0',
+                })
+              else
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'owner' => '0',
+                })
+              end
+            end
+
+            if operatingsystemrelease < 10.04
+              it 'the init script file permissions should be 0755' do
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'mode' => '0755',
+                })
+              end
+            else
+              it 'the init script file permissions should be 0644' do
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'mode' => '0644',
+                })
+              end
+            end
+
+            if operatingsystemrelease > 7.0 and operatingsystemrelease < 14.04
+              it 'the init script file should contain expect fork' do
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'content' => /^expect fork$/,
+                })
+              end
+            end
+
+            if operatingsystemrelease > 12.04
+              it 'the init script file should contain exec /sbin/irqbalance  $DOPTIONS $OPTIONS --foreground' do
+                should contain_file('/etc/init/irqbalance.conf').with({
+                  'content' => /^\texec \/usr\/sbin\/irqbalance  \$DOPTIONS \$OPTIONS --foreground$/
+                })
+              end
+            end
+
+          end
+
+        end
+
+        context 'with the manage_init_script file parameter set to false' do
+          let (:params) { { :manage_init_script_file => false, } }
+
+          it 'the init script file resource should not be in the catalog' do
+            if operatingsystemrelease < 10.04
+              should_not contain_file('/etc/init.d/irqbalance')
+            else
+              should_not contain_file('/etc/init/irqbalance.conf')
+            end
+          end
+        end
+
       end
     end
 
@@ -710,6 +855,15 @@ describe 'irqbalance', :type => :class do
             should contain_service('irqbalance').with({
               'provider' => provider,
             })
+          end
+
+        end
+
+        context 'with the irqbalance service not managed' do
+          let (:params) { { :service_manage => false,} }
+
+          it 'the service resource irqbalance should not be in the catalog' do
+            should_not contain_service('irqbalance')
           end
 
         end
@@ -1243,6 +1397,126 @@ describe 'irqbalance', :type => :class do
 
         end
 
+        context 'with the package_manage parameter set to false' do
+          let (:params) { { :package_manage => false,} }
+
+          it 'the package resource irqbalance should not be in the catalog' do
+            should_not contain_package('irqbalance')
+          end
+
+        end
+
+        # Init script resource tests
+
+        context 'with the manage_init_script_file parameter set to true' do
+          let (:default_params) { { :manage_init_script_file => true, } }
+
+          context 'and sysv_init_script_file_source  or systemd_init_script_file set' do
+            let :params do
+              default_params.merge!({
+                :sysv_init_script_file_source => 'puppet://modules/irqbalance/sysv',
+                :systemd_init_script_file_source => 'puppet://modules/irqbalance/systemd',
+              })
+            end
+
+            it 'the init script group should be root' do
+              if operatingsystemrelease < 7.0
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'group' => '0',
+                })
+              else
+                should contain_file('/usr/lib/systemd/system/irqbalance.service').with({
+                  'group' => '0',
+                })
+              end
+            end
+
+            it 'the init script owner should be root' do
+              if operatingsystemrelease < 7.0
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'owner' => '0',
+                })
+              else
+                should contain_file('/usr/lib/systemd/system/irqbalance.service').with({
+                  'owner' => '0',
+                })
+              end
+            end
+
+            if operatingsystemrelease < 7.0
+              it 'the init script file permissions should be 0755' do
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'mode' => '0755',
+                })
+              end
+            else
+              it 'the init script file permissions should be 0644' do
+                should contain_file('/usr/lib/systemd/system/irqbalance.service').with({
+                  'mode' => '0644',
+                })
+              end
+            end
+
+          end
+
+          context 'and *_init_script_file_source not set' do
+            # The *_init_script_file_source parameters default to undef
+            let (:params) { { :manage_init_script_file => true, } }
+          
+            it 'the init script group should be root' do
+              if operatingsystemrelease < 7.0
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'group' => '0',
+                })
+              else
+                should contain_file('/usr/lib/systemd/system/irqbalance.service').with({
+                  'group' => '0',
+                })
+              end
+            end
+
+            it 'the init script owner should be root' do
+              if operatingsystemrelease < 7.0
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'owner' => '0',
+                })
+              else
+                should contain_file('/usr/lib/systemd/system/irqbalance.service').with({
+                  'owner' => '0',
+                })
+              end
+            end
+
+            if operatingsystemrelease < 7.0
+              it 'the init script file permissions should be 0755' do
+                should contain_file('/etc/init.d/irqbalance').with({
+                  'mode' => '0755',
+                })
+              end
+            else
+              it 'the init script file permissions should be 0644' do
+                should contain_file('/usr/lib/systemd/system/irqbalance.service').with({
+                  'mode' => '0644',
+                })
+              end
+            end
+
+          end
+
+        end
+
+        context 'with the manage_init_script file parameter set to false' do
+          let (:params) { { :manage_init_script_file => false, } }
+
+          it 'the init script file resource should not be in the catalog' do
+            if operatingsystemrelease < 7.0
+              should_not contain_file('/etc/init.d/irqbalance')
+            else
+              should_not contain_file('/etc/init/irqbalance.conf')
+            end
+          end
+        end
+
       end
     end
 
@@ -1358,6 +1632,15 @@ describe 'irqbalance', :type => :class do
           should contain_service('irqbalance').with({
             'provider' => 'redhat',
           })
+        end
+
+      end
+
+      context 'with the irqbalance service not managed' do
+        let (:params) { { :service_manage => false,} }
+
+        it 'the service resource irqbalance should not be in the catalog' do
+          should_not contain_service('irqbalance')
         end
 
       end
@@ -1525,8 +1808,108 @@ describe 'irqbalance', :type => :class do
 
       end
 
+      context 'with the package_manage parameter set to false' do
+        let (:params) { { :package_manage => false,} }
+
+        it 'the package resource irqbalance should not be in the catalog' do
+          should_not contain_package('irqbalance')
+        end
+
+      end
+
+      # Init script resource tests
+
+      context 'with the manage_init_script_file parameter set to true' do
+        let (:default_params) { { :manage_init_script_file => true, } }
+
+        context 'and sysv_init_script_file_source set' do
+          let :params do
+            default_params.merge!({
+              :sysv_init_script_file_source => 'puppet://modules/irqbalance/sysv',
+            })
+          end
+
+          it 'the init script group should be root' do
+            should contain_file('/etc/init.d/irq_balancer').with({
+              'group' => '0',
+            })
+          end
+
+          it 'the init script owner should be root' do
+            should contain_file('/etc/init.d/irq_balancer').with({
+              'owner' => '0',
+            })
+          end
+
+          it 'the init script file permissions should be 0755' do
+            should contain_file('/etc/init.d/irq_balancer').with({
+              'mode' => '0755',
+            })
+          end
+
+        end
+
+        context 'and *_init_script_file_source not set' do
+          # The *_init_script_file_source parameters default to undef
+          let (:params) { { :manage_init_script_file => true, } }
+          
+          it 'the init script group should be root' do
+            should contain_file('/etc/init.d/irq_balancer').with({
+              'group' => '0',
+            })
+          end
+
+          it 'the init script owner should be root' do
+            should contain_file('/etc/init.d/irq_balancer').with({
+              'owner' => '0',
+            })
+          end
+
+          it 'the init script file permissions should be 0755' do
+            should contain_file('/etc/init.d/irq_balancer').with({
+              'mode' => '0755',
+            })
+          end
+
+        end
+
+      end
+
+      context 'with the manage_init_script file parameter set to false' do
+        let (:params) { { :manage_init_script_file => false, } }
+
+        it 'the init script file resource should not be in the catalog' do
+          should_not contain_file('/etc/init.d/irq_balancer')
+        end
+
+      end
+
     end
 
   end
+
+  context 'when on a single processor system' do
+    let(:facts) {{
+      :operatingsystemrelease => '6.0',
+      :osfamily               => 'RedHat',
+      :processorcount         => '1',
+    }}
+
+    context 'with the irqbalance service managed' do
+      let (:params) { { :service_manage => true, } }
+
+      it 'the running state of the irqbalance service is not managed' do
+        should_not contain_service('irqbalance').with({
+          'ensure' => 'running',
+        })
+        should_not contain_service('irqbalance').with({
+         'ensure' => 'stopped',
+       })
+      end
+
+    end
+
+  end
+
 end
 
