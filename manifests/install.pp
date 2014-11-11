@@ -12,3 +12,4 @@ class irqbalance::install inherits irqbalance {
   }
 
 }
+

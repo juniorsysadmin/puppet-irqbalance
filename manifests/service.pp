@@ -38,3 +38,4 @@ class irqbalance::service inherits irqbalance {
   }
 
 }
+

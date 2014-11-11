@@ -248,3 +248,4 @@ class irqbalance (
   anchor { 'irqbalance::end': }
 
 }
+

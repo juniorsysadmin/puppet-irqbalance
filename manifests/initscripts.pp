@@ -73,3 +73,4 @@ class irqbalance::initscripts inherits irqbalance {
   }
 
 }
+

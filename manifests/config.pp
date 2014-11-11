@@ -27,3 +27,4 @@ class irqbalance::config inherits irqbalance {
   }
 
 }
+
