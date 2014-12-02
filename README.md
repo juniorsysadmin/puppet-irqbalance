@@ -5,9 +5,9 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Usage](#usage)
-3. [Limitations](#limitations)
-4. [Development](#development)
+1. [Usage](#usage)
+1. [Limitations](#limitations)
+1. [Development](#development)
 
 ## Overview
 
@@ -37,17 +37,17 @@ eg. `upstart_init_script_file_source` or `systemd_init_script_file_template`.
 This module will default to using the following init types to manage the
 service:
 
-- CentOS/RHEL5 will use SysV init scripts.
-- CentOS/RHEL6 will use SysV init scripts.
-- CentOS/RHEL7 will use systemd.
-- Fedora will use systemd.
-- Debian 6 will use SysV init scripts.
-- Debian 7 will use SysV init scripts.
-- Ubuntu 10.04 will use Upstart.
-- Ubuntu 12.04 will use Upstart.
-- Ubuntu 14.04 will use Upstart.
-- SLES 11 SP1 will use SysV init scripts.
-- Gentoo will use OpenRC.
+* CentOS/RHEL5 will use SysV init scripts.
+* CentOS/RHEL6 will use SysV init scripts.
+* CentOS/RHEL7 will use systemd.
+* Fedora will use systemd.
+* Debian 6 will use SysV init scripts.
+* Debian 7 will use SysV init scripts.
+* Ubuntu 10.04 will use Upstart.
+* Ubuntu 12.04 will use Upstart.
+* Ubuntu 14.04 will use Upstart.
+* SLES 11 SP1 will use SysV init scripts.
+* Gentoo will use OpenRC.
 
 Debian 7 and Ubuntu 14.04 support systemd as a non-default init but note that
 neither come with an irqbalance service unit file. Examples of managing
