@@ -7,6 +7,7 @@ group :test do
   gem "rspec-puppet"
   gem "puppet-syntax"
   gem "puppetlabs_spec_helper"
+  gem "metadata-json-lint"
 end
 
 group :development do
@@ -14,6 +15,7 @@ group :development do
   gem "travis-lint"
   gem "beaker"
   gem "beaker-rspec"
+  gem "minitest", '~> 4.7.5'
   gem "vagrant-wrapper"
   gem "guard-rake"
   gem "pry"

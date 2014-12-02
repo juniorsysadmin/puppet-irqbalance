@@ -11,9 +11,20 @@ PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp", "vendor/
 
 PuppetSyntax.exclude_paths = ["spec/**/*", "pkg/**/*", "vendor/**/*"]
 
+desc "Run acceptance tests"
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+t.pattern = 'spec/acceptance'
+end
+
+desc "Run metadata-json-lint on the metadata.json file"
+task :metadata do
+  sh "metadata-json-lint metadata.json"
+end
+
 desc "Run syntax, lint, and spec tests."
 task :test => [
   :syntax,
   :lint,
   :spec,
+  :metadata,
 ]
