@@ -7,6 +7,7 @@ group :test do
   gem "rspec-puppet"
   gem "puppet-syntax"
   gem "puppetlabs_spec_helper"
+  gem "json"
   gem "metadata-json-lint"
 end
 
