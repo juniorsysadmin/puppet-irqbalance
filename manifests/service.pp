@@ -15,6 +15,10 @@ class irqbalance::service inherits irqbalance {
     $singleprocessor = true
   }
 
+  else {
+    $singleprocessor = false
+  }
+
   $ignore_service_ensure = $irqbalance::bool_oneshot or $singleprocessor
 
   $real_service_ensure = $ignore_service_ensure ? {

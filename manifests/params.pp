@@ -12,6 +12,7 @@ class irqbalance::params {
   $config_file_group                 = '0'
   $config_file_mode                  = '0644'
   $config_file_owner                 = '0'
+  $config_file_source                = undef
   $debug                             = false
   $dependency_class                  = undef
   $deepestcache                      = undef
@@ -63,6 +64,7 @@ class irqbalance::params {
         $args_regex = '.^'
         $config_file_template = 'irqbalance/config/debian-irqbalance.erb'
         $service_provider = 'debian'
+        $upstart_init_script_file_template = undef
       }
 
       # Debian Wheezy
@@ -84,6 +86,7 @@ class irqbalance::params {
         $args_regex= '^(--hintpolicy=(exact|subset|ignore)|--powerthresh=[\d]+)$'
         $config_file_template = 'irqbalance/config/debian-irqbalance.erb'
         $service_provider = 'debian'
+        $upstart_init_script_file_template = undef
       }
 
       # Ubuntu Lucid 10.04 LTS
@@ -144,6 +147,7 @@ class irqbalance::params {
       $package_name     = [ 'irqbalance' ]
       $service_name     = 'irqbalance'
       $systemd_dir_path = '/usr/lib/systemd/system'
+      $upstart_init_script_file_template = undef
 
       # CentOS/RHEL 5
       # The irqbalance version included with CentOS 5 is 0.55
@@ -220,6 +224,7 @@ class irqbalance::params {
       $package_name     = [ 'irqbalance' ]
       $service_name     = 'irq_balancer'
       $systemd_dir_path = '/lib/systemd/system'
+      $upstart_init_script_file_template = undef
 
       # SLES 11
       # The irqbalance version included with SLES 11 is 0.55
@@ -253,6 +258,7 @@ class irqbalance::params {
       $package_name       = [ 'irqbalance' ]
       $service_name       = 'irqbalance'
       $service_provider   = 'openrc'
+      $upstart_init_script_file_template = undef
     }
 
     'Linux': {
@@ -270,6 +276,7 @@ class irqbalance::params {
           $package_name       = [ 'irqbalance' ]
           $service_name       = 'irqbalance'
           $service_provider   = 'openrc'
+          $upstart_init_script_file_template = undef
         }
         default: {
           fail("The ${module_name} module is not supported on an ${::operatingsystem} distribution.")

@@ -127,6 +127,8 @@ class irqbalance (
   validate_string($service_name)
   validate_string($service_provider)
 
+  $bool_oneshot = str2bool($oneshot)
+
   if !$config_file_source {
 
     # Validate the environment variables for the configuration file if using a template
@@ -149,8 +151,6 @@ class irqbalance (
       validate_re($banned_interrupts_args, '^(\d{2}(\s\d{2})*)$', 'One or more invalid banned_interrupts values were provided.')
     }
 
-    $bool_oneshot = str2bool($oneshot)
-
     # If a full set of options have been provided, each option will not be validated
 
     if $args {
@@ -168,6 +168,10 @@ class irqbalance (
         $banirq_withopt = prefix($banirq, '--banirq=')
         $banirq_args = join($banirq_withopt, ' ')
         validate_re($banirq_args, '^(--banirq=\d{2}(\s--banirq=\d{2})*)$', 'One or more invalid banirq values were provided.')
+      }
+
+      else {
+        $banirq_args = ''
       }
 
       if $banscript {
