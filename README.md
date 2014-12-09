@@ -209,6 +209,10 @@ Owner for the irqbalance configuration file. Defaults to '0'.
 Used for providing your own irqbalance configuration file.
 Needs to follow the same requirements as the Puppet File source attribute.
 eg. config_file_source => 'puppet:///modules/irqbalance/config/irq.conf',
+If this parameter is provided, you should also set the `oneshot` parameter to
+'yes' if the file contains ONESHOT=yes, since this module does not know about
+the contents and uses `oneshot` to decide how to manage the service. See the
+`service_ensure` parameter.
 
 #### `config_file_template`
 
