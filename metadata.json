@@ -3,11 +3,11 @@
   "version": "1.0.3",
   "author": "Ben Spiccia",
   "summary": "Puppet module for installing and managing irqbalance",
-  "license": "Apache License, Version 2.0",
+  "license": "Apache-2.0",
   "source": "git://github.com/juniorsysadmin/puppet-irqbalance.git",
   "project_page": "https://github.com/juniorsysadmin/puppet-irqbalance",
   "issues_url": "https://github.com/juniorsysadmin/puppet-irqbalance/issues",
-  "tags": ["irqbalance", "irq", "rhel", "centos", "debian", "ubuntu", "gentoo"],
+  "tags": ["irqbalance", "irq"],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -50,7 +50,7 @@
   "dependencies": [
     {
       "name":"puppetlabs/stdlib",
-      "version_requirement":">= 3.0.0"
+      "version_requirement":">= 3.0.0 < 5.0.0"
     }
   ],
   "requirements": [
