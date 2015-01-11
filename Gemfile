@@ -1,23 +1,34 @@
-source "http://rubygems.org"
+source ENV['GEM_SOURCE'] || "http://rubygems.org"
 
-group :test do
-  gem "rake"
-  gem "puppet", ENV['PUPPET_VERSION'] || '~> 3.7.0'
-  gem "puppet-lint"
-  gem "rspec-puppet"
-  gem "puppet-syntax"
-  gem "puppetlabs_spec_helper"
-  gem "json"
-  gem "metadata-json-lint"
+group :development, :unit_tests do
+  gem 'rake',                   :require => false
+  gem 'rspec-puppet',           :require => false
+  gem 'puppetlabs_spec_helper', :require => false
+  gem 'puppet-lint',            :require => false
+  gem 'puppet_facts',           :require => false
+  gem 'json',                   :require => false
+  gem 'metadata-json-lint',     :require => false
 end
 
-group :development do
-  gem "travis"
-  gem "travis-lint"
-  gem "beaker"
-  gem "beaker-rspec"
-  gem "minitest", '~> 4.7.5'
-  gem "vagrant-wrapper"
-  gem "guard-rake"
-  gem "pry"
+group :system_tests do
+  gem 'travis',               :require => false
+  gem 'travis-lint',          :require => false
+  gem 'beaker-rspec',         :require => false
+  gem 'minitest', '~> 4.7.5', :require => false
+  gem 'vagrant-wrapper',      :require => false
+  gem 'guard-rake',           :require => false
 end
+
+if facterversion = ENV['FACTER_GEM_VERSION']
+	  gem 'facter', facterversion, :require => false
+else
+	  gem 'facter', :require => false
+end
+
+if puppetversion = ENV['PUPPET_GEM_VERSION']
+	  gem 'puppet', puppetversion, :require => false
+else
+	  gem 'puppet', :require => false
+end
+
+# vim:ft=ruby
