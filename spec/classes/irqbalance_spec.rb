@@ -5,10 +5,10 @@ describe 'irqbalance', :type => :class do
   context 'when on a multiprocessor system' do
     let(:default_facts) { { :processorcount => '2', } }
 
-    [ 6.0, 7.0, 10.04, 12.04, 14.04, ].each do |operatingsystemrelease|
+    [ '6.0', '7.0', '10.04', '12.04', '14.04', ].each do |operatingsystemrelease|
       context "running Debian/Ubuntu release #{operatingsystemrelease}" do
 
-        if operatingsystemrelease < 10.04
+        if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
           provider = 'debian'
         else
           provider = 'upstart'
@@ -181,7 +181,7 @@ describe 'irqbalance', :type => :class do
         context "with banned_interrupts parameter set to ['33', '03']" do
           let (:params) { { :banned_interrupts => ['33', '03'], } }
 
-          if operatingsystemrelease < 14.04
+          if operatingsystemrelease != '14.04'
             it 'the irqbalance config file should contain IRQBALANCE_BANNED_INTERRUPTS="33 03"' do
               should contain_file('/etc/default/irqbalance').with({
                 'content' => /^IRQBALANCE_BANNED_INTERRUPTS="33 03"$/,
@@ -247,7 +247,7 @@ describe 'irqbalance', :type => :class do
         context "with banirq parameter set to ['01', '03', '04']" do
           let (:params) { { :banirq => ['01', '03', '04'], } }
 
-          if operatingsystemrelease < 14.04
+          if operatingsystemrelease != '14.04'
             it 'the irqbalance config file should not contain --banirq' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--banirq/,
@@ -295,7 +295,7 @@ describe 'irqbalance', :type => :class do
         context 'with debug parameter set to true' do
           let (:params) { { :debug => true, } }
 
-          if operatingsystemrelease < 14.04
+          if operatingsystemrelease != '14.04'
             it 'the irqbalance config file should not contain --debug' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--debug/,
@@ -343,7 +343,7 @@ describe 'irqbalance', :type => :class do
         context 'with hintpolicy parameter set to exact' do
           let (:params) { { :hintpolicy => 'exact', } }
 
-          if operatingsystemrelease < 14.04 and operatingsystemrelease != 7.0
+          if operatingsystemrelease != '14.04' and operatingsystemrelease != '7.0'
             it 'the irqbalance config file should not contain --hintpolicy' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--hintpolicy/,
@@ -361,7 +361,7 @@ describe 'irqbalance', :type => :class do
         context 'with hintpolicy parameter set to subset' do
           let (:params) { { :hintpolicy => 'subset', } }
 
-          if operatingsystemrelease < 14.04 and operatingsystemrelease != 7.0
+          if operatingsystemrelease != '14.04' and operatingsystemrelease != '7.0'
             it 'the irqbalance config file should not contain --hintpolicy' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--hintpolicy/,
@@ -379,7 +379,7 @@ describe 'irqbalance', :type => :class do
         context 'with hintpolicy parameter set to ignore' do
           let (:params) { { :hintpolicy => 'ignore', } }
 
-          if operatingsystemrelease < 14.04 and operatingsystemrelease !=7.0
+          if operatingsystemrelease != '14.04' and operatingsystemrelease !='7.0'
             it 'the irqbalance config file should not contain --hintpolicy' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--hintpolicy/,
@@ -407,7 +407,7 @@ describe 'irqbalance', :type => :class do
         context 'with pid parameter set to /path/to/irqbalance.pid' do
           let (:params) { { :pid => '/path/to/irqbalance.pid', } }
 
-          if operatingsystemrelease < 14.04
+          if operatingsystemrelease != '14.04'
             it 'the irqbalance config file should not contain --pid' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--pid/,
@@ -435,7 +435,7 @@ describe 'irqbalance', :type => :class do
         context 'with policyscript parameter set to /path/to/policyscript' do
           let (:params) { { :policyscript => '/path/to/policyscript', } }
 
-          if operatingsystemrelease < 14.04
+          if operatingsystemrelease != '14.04'
             it 'the irqbalance config file should not contain --policyscript' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--policyscript/,
@@ -463,7 +463,7 @@ describe 'irqbalance', :type => :class do
         context 'with powerthresh parameter set to 2' do
           let (:params) { { :powerthresh => '2', } }
 
-          if operatingsystemrelease < 14.04 and operatingsystemrelease != 7.0
+          if operatingsystemrelease != '14.04' and operatingsystemrelease != '7.0'
             it 'the irqbalance config file should not contain --powerthresh' do
               should_not contain_file('/etc/default/irqbalance').with({
                 'content' => /--powerthresh/,
@@ -613,7 +613,7 @@ describe 'irqbalance', :type => :class do
             end
 
             it 'the init script group should be root' do
-              if operatingsystemrelease < 10.04
+              if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'group' => '0',
                 })
@@ -625,7 +625,7 @@ describe 'irqbalance', :type => :class do
             end
 
             it 'the init script owner should be root' do
-              if operatingsystemrelease < 10.04
+              if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'owner' => '0',
                 })
@@ -636,7 +636,7 @@ describe 'irqbalance', :type => :class do
               end
             end
 
-            if operatingsystemrelease < 10.04
+            if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
               it 'the init script file permissions should be 0755' do
                 should contain_file('/etc/init.d/irqbalance').with({
                   'mode' => '0755',
@@ -657,7 +657,7 @@ describe 'irqbalance', :type => :class do
             let (:params) { { :manage_init_script_file => true, } }
           
             it 'the init script group should be root' do
-              if operatingsystemrelease < 10.04
+              if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'group' => '0',
                 })
@@ -669,7 +669,7 @@ describe 'irqbalance', :type => :class do
             end
 
             it 'the init script owner should be root' do
-              if operatingsystemrelease < 10.04
+              if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'owner' => '0',
                 })
@@ -680,7 +680,7 @@ describe 'irqbalance', :type => :class do
               end
             end
 
-            if operatingsystemrelease < 10.04
+            if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
               it 'the init script file permissions should be 0755' do
                 should contain_file('/etc/init.d/irqbalance').with({
                   'mode' => '0755',
@@ -694,7 +694,7 @@ describe 'irqbalance', :type => :class do
               end
             end
 
-            if operatingsystemrelease > 7.0 and operatingsystemrelease < 14.04
+            if operatingsystemrelease == '10.04' or operatingsystemrelease == '12.04'
               it 'the init script file should contain expect fork' do
                 should contain_file('/etc/init/irqbalance.conf').with({
                   'content' => /^expect fork$/,
@@ -702,7 +702,7 @@ describe 'irqbalance', :type => :class do
               end
             end
 
-            if operatingsystemrelease > 12.04
+            if operatingsystemrelease == '14.04'
               it 'the init script file should contain exec /sbin/irqbalance  $DOPTIONS $OPTIONS --foreground' do
                 should contain_file('/etc/init/irqbalance.conf').with({
                   'content' => /^\texec \/usr\/sbin\/irqbalance  \$DOPTIONS \$OPTIONS --foreground$/
@@ -718,7 +718,7 @@ describe 'irqbalance', :type => :class do
           let (:params) { { :manage_init_script_file => false, } }
 
           it 'the init script file resource should not be in the catalog' do
-            if operatingsystemrelease < 10.04
+            if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
               should_not contain_file('/etc/init.d/irqbalance')
             else
               should_not contain_file('/etc/init/irqbalance.conf')
@@ -729,16 +729,16 @@ describe 'irqbalance', :type => :class do
       end
     end
 
-    [ 5.9, 6.6, 7.0, 20.0].each do |operatingsystemrelease|
+    [ '5.9', '6.6', '7.0', '20'].each do |operatingsystemrelease|
       context "running RHEL/Fedora release #{operatingsystemrelease}" do
 
-        if operatingsystemrelease ==  20
+        if operatingsystemrelease ==  '20'
           operatingsystem = 'Fedora'
         else
           operatingsystem = 'RedHat'
         end
 
-        if operatingsystemrelease < 7.0
+        if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
           provider = 'redhat'
         else
           provider = 'systemd'
@@ -872,7 +872,7 @@ describe 'irqbalance', :type => :class do
         context 'with oneshot parameter set to yes' do
           let (:params) { { :oneshot => 'yes', } }
 
-          if operatingsystemrelease == 5.9
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should contain ONESHOT=yes' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^ONESHOT=yes$/,
@@ -891,7 +891,7 @@ describe 'irqbalance', :type => :class do
         context 'with oneshot parameter set to no' do
           let (:params) { { :oneshot => 'no', } }
 
-          if operatingsystemrelease == 5.9
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should contain #ONESHOT=' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^#ONESHOT=$/,
@@ -910,7 +910,7 @@ describe 'irqbalance', :type => :class do
         context "with affinity_mask parameter set to ['ff000000', '0000000']" do
           let (:params) { { :affinity_mask => ['ff000000', '0000000'], } }
 
-          if operatingsystemrelease == 5.9
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should contain IRQ_AFFINITY_MASK="ff000000,0000000"' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^IRQ_AFFINITY_MASK="ff000000,0000000"$/,
@@ -928,7 +928,7 @@ describe 'irqbalance', :type => :class do
         context 'with no affinity_mask parameter provided' do
           # The default for this parameter is undef
 
-          if operatingsystemrelease == 5.9
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should contain #IRQ_AFFINITY_MASK' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^#IRQ_AFFINITY_MASK=$/,
@@ -946,7 +946,7 @@ describe 'irqbalance', :type => :class do
         context "with banned_interrupts parameter set to ['01', '03']" do
           let (:params) { { :banned_interrupts => ['01', '03'], } }
 
-          if operatingsystemrelease == 5.9
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should contain IRQBALANCE_BANNED_INTERRUPTS="01 03"' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^IRQBALANCE_BANNED_INTERRUPTS="01 03"$/,
@@ -964,7 +964,7 @@ describe 'irqbalance', :type => :class do
         context 'with no banned_interrupts parameter provided' do
           # The default for this parameter is undef
 
-          if operatingsystemrelease == 5.9
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should contain #IRQBALANCE_BANNED_INTERRUPTS' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^#IRQBALANCE_BANNED_INTERRUPTS=$/,
@@ -1002,7 +1002,7 @@ describe 'irqbalance', :type => :class do
         context 'with args parameter set to "--args1 --args2"' do
           let (:params) { { :args => '--args1 --args2', } }
 
-          if operatingsystemrelease != 5.9
+          if operatingsystemrelease != '5.9'
             it 'the irqbalance config file should contain IRQBALANCE_ARGS="--args1 --args2"' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^IRQBALANCE_ARGS="--args1 --args2"$/,
@@ -1020,7 +1020,7 @@ describe 'irqbalance', :type => :class do
         context 'with no args parameter provided' do
           # The default for this parameter is undef
 
-          if operatingsystemrelease != 5.9
+          if operatingsystemrelease != '5.9'
             it 'the irqbalance config file should contain #IRQBALANCE_ARGS=' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /^#IRQBALANCE_ARGS=$/,
@@ -1038,7 +1038,7 @@ describe 'irqbalance', :type => :class do
         context "with banirq parameter set to ['01', '03', '04']" do
           let (:params) { { :banirq => ['01', '03', '04'], } }
 
-          if operatingsystemrelease < 6.0
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should not contain --banirq' do
               should_not contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--banirq/,
@@ -1066,7 +1066,7 @@ describe 'irqbalance', :type => :class do
         context 'with banscript parameter set to /path/to/banscript.sh' do
           let (:params) { { :banscript => '/path/to/banscript.sh', } }
 
-          if operatingsystemrelease == 6.6
+          if operatingsystemrelease == '6.6'
             it 'the irqbalance config file should contain --banscript=/path/to/banscript.sh' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--banscript=\/path\/to\/banscript\.sh/,
@@ -1094,7 +1094,7 @@ describe 'irqbalance', :type => :class do
         context 'with debug parameter set to true' do
           let (:params) { { :debug => true, } }
 
-          if operatingsystemrelease < 7.0
+          if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
             it 'the irqbalance config file should not contain --debug' do
               should_not contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--debug/,
@@ -1122,7 +1122,7 @@ describe 'irqbalance', :type => :class do
         context 'with deepestcache parameter set to 2' do
           let (:params) { { :deepestcache => '2', } }
 
-          if operatingsystemrelease > 19
+          if operatingsystemrelease == '20'
             it 'the irqbalance config file should contain --deepestcache=2' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--deepestcache=2/,
@@ -1150,7 +1150,7 @@ describe 'irqbalance', :type => :class do
         context 'with hintpolicy parameter set to exact' do
           let (:params) { { :hintpolicy => 'exact', } }
   
-          if operatingsystemrelease != 5.9
+          if operatingsystemrelease != '5.9'
             it 'the irqbalance config file should contain --hintpolicy=exact' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--hintpolicy=exact/,
@@ -1168,7 +1168,7 @@ describe 'irqbalance', :type => :class do
         context 'with hintpolicy parameter set to subset' do
           let (:params) { { :hintpolicy => 'subset', } }
 
-          if operatingsystemrelease != 5.9
+          if operatingsystemrelease != '5.9'
             it 'the irqbalance config file should contain --hintpolicy=subset' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--hintpolicy=subset/,
@@ -1186,7 +1186,7 @@ describe 'irqbalance', :type => :class do
         context 'with hintpolicy parameter set to ignore' do
           let (:params) { { :hintpolicy => 'ignore', } }
 
-          if operatingsystemrelease != 5.9
+          if operatingsystemrelease != '5.9'
             it 'the irqbalance config file should contain --hintpolicy=ignore' do
               should contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--hintpolicy=ignore/,
@@ -1214,7 +1214,7 @@ describe 'irqbalance', :type => :class do
         context 'with pid parameter set to /path/to/irqbalance.pid' do
           let (:params) { { :pid => '/path/to/irqbalance.pid', } }
 
-          if operatingsystemrelease < 7.0
+          if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
             it 'the irqbalance config file should not contain --pid' do
               should_not contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--pid/,
@@ -1242,7 +1242,7 @@ describe 'irqbalance', :type => :class do
         context 'with policyscript parameter set to /path/to/policyscript' do
           let (:params) { { :policyscript => '/path/to/policyscript', } }
 
-          if operatingsystemrelease < 7.0
+          if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
             it 'the irqbalance config file should not contain --policyscript' do
               should_not contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--policyscript/,
@@ -1270,7 +1270,7 @@ describe 'irqbalance', :type => :class do
         context 'with powerthresh parameter set to 2' do
           let (:params) { { :powerthresh => '2', } }
 
-          if operatingsystemrelease < 6.0
+          if operatingsystemrelease == '5.9'
             it 'the irqbalance config file should not contain --powerthresh' do
               should_not contain_file('/etc/sysconfig/irqbalance').with({
                 'content' => /--powerthresh/,
@@ -1420,7 +1420,7 @@ describe 'irqbalance', :type => :class do
             end
 
             it 'the init script group should be root' do
-              if operatingsystemrelease < 7.0
+              if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'group' => '0',
                 })
@@ -1432,7 +1432,7 @@ describe 'irqbalance', :type => :class do
             end
 
             it 'the init script owner should be root' do
-              if operatingsystemrelease < 7.0
+              if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'owner' => '0',
                 })
@@ -1443,7 +1443,7 @@ describe 'irqbalance', :type => :class do
               end
             end
 
-            if operatingsystemrelease < 7.0
+            if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
               it 'the init script file permissions should be 0755' do
                 should contain_file('/etc/init.d/irqbalance').with({
                   'mode' => '0755',
@@ -1464,7 +1464,7 @@ describe 'irqbalance', :type => :class do
             let (:params) { { :manage_init_script_file => true, } }
           
             it 'the init script group should be root' do
-              if operatingsystemrelease < 7.0
+              if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'group' => '0',
                 })
@@ -1476,7 +1476,7 @@ describe 'irqbalance', :type => :class do
             end
 
             it 'the init script owner should be root' do
-              if operatingsystemrelease < 7.0
+              if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
                 should contain_file('/etc/init.d/irqbalance').with({
                   'owner' => '0',
                 })
@@ -1487,7 +1487,7 @@ describe 'irqbalance', :type => :class do
               end
             end
 
-            if operatingsystemrelease < 7.0
+            if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
               it 'the init script file permissions should be 0755' do
                 should contain_file('/etc/init.d/irqbalance').with({
                   'mode' => '0755',
@@ -1509,7 +1509,7 @@ describe 'irqbalance', :type => :class do
           let (:params) { { :manage_init_script_file => false, } }
 
           it 'the init script file resource should not be in the catalog' do
-            if operatingsystemrelease < 7.0
+            if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
               should_not contain_file('/etc/init.d/irqbalance')
             else
               should_not contain_file('/etc/init/irqbalance.conf')
