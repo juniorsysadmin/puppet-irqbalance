@@ -1,5 +1,3 @@
-# == Class: irqbalance::config
-#
 class irqbalance::config inherits irqbalance {
 
   if $irqbalance::config_file_source {
@@ -27,4 +25,3 @@ class irqbalance::config inherits irqbalance {
   }
 
 }
-

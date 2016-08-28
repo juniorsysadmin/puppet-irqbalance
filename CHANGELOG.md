@@ -1,3 +1,29 @@
+## Future
+
+## Backwards-incompatible changes
+
+none
+
+### Summary
+
+Code cleanup and preparation for next major release
+
+### Features
+
+- Drops testing and support of Puppet versions less than 3.8.7
+- Drops testing of Facter versions less than 2.4.0
+- Drops testing of Ruby versions less than 2.1.9
+- Deprecates `dependency_class` parameter
+- Removes comments and whitespace taken from vendor defaults in irqbalance config
+  templates
+- Adds explicit Puppet 4 support
+- Bumps stdlib minimum required version to 4.6.0
+- Uses '0' for group rather than 'root'
+
+### Bugs
+
+- Provides a workaround to #1 by with `manage_systemd_dir_path => false`
+
 ## 2015-01-11 Release 1.0.4
 
 ### Backwards-incompatible changes:

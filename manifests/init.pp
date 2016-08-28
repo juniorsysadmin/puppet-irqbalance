@@ -1,16 +1,3 @@
-# == Class: irqbalance
-#
-# This module installs and manages the irqbalance daemon. It will accept any
-# option or environment variable that irqbalance supports and will simply
-# ignore anything not supported by the default irqbalance version that comes
-# with the distribution.
-#
-# === Usage
-#
-# include '::irqbalance'
-#
-# See the README.md for the full list of parameters
-#
 class irqbalance (
   $affinity_mask                     = $irqbalance::params::affinity_mask,
   $args                              = $irqbalance::params::args,
@@ -32,6 +19,7 @@ class irqbalance (
   $hintpolicy                        = $irqbalance::params::hintpolicy,
   $irqbalance_path                   = $irqbalance::params::irqbalance_path,
   $manage_init_script_file           = $irqbalance::params::manage_init_script_file,
+  $manage_systemd_dir_path           = $irqbalance::params::manage_systemd_dir_path,
   $oneshot                           = $irqbalance::params::oneshot,
   $package_ensure                    = $irqbalance::params::package_ensure,
   $package_manage                    = $irqbalance::params::package_manage,
@@ -63,7 +51,16 @@ class irqbalance (
 ) inherits irqbalance::params {
 
   if $dependency_class {
+    warning("${module_name}: dependency_class is deprecated and will be removed in the next release.")
     require $dependency_class
+  }
+
+  if (versioncmp($::rubyversion, '2.1.0') < 0) {
+    warning("${module_name}: Ruby ${::rubyversion} will not be supported in the next release.")
+  }
+
+  if (versioncmp($::facterversion, '2.4.0') < 0) {
+    warning("${module_name}: Facter: ${::facterversion} will not be supported in the next release.")
   }
 
   case $service_provider {
@@ -83,12 +80,14 @@ class irqbalance (
       $init_script_file_source   = $systemd_init_script_file_source
       $init_script_file_template = $systemd_init_script_file_template
 
-      file { $systemd_dir_path:
-        ensure => 'directory',
-        group  => 'root',
-        mode   => '2755',
+      if $manage_systemd_dir_path {
+        warning("${module_name}: manage_systemd_dir_path will be removed in the next release.")
+        file { $systemd_dir_path:
+          ensure => 'directory',
+          group  => '0',
+          mode   => '2755',
+        }
       }
-
     }
     'upstart': {
       $init_script_file_group    = $upstart_init_script_file_group
@@ -252,4 +251,3 @@ class irqbalance (
   anchor { 'irqbalance::end': }
 
 }
-
