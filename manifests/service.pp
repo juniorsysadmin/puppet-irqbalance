@@ -1,7 +1,3 @@
-# == Class: irqbalance::service
-#
-# Class to manage the irqbalance service
-#
 class irqbalance::service inherits irqbalance {
 
   # On single processor systems or when oneshot is enabled irqbalance will
@@ -42,4 +38,3 @@ class irqbalance::service inherits irqbalance {
   }
 
 }
-

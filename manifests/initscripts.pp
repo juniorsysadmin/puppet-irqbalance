@@ -1,7 +1,3 @@
-# == Class: irqbalance::initscripts
-#
-# Class to install init scripts for irqbalance
-#
 class irqbalance::initscripts inherits irqbalance {
 
   # If the init script file gets replaced, systemd needs to run daemon-reload.
@@ -73,4 +69,3 @@ class irqbalance::initscripts inherits irqbalance {
   }
 
 }
-

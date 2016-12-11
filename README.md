@@ -231,6 +231,12 @@ available options that irqbalance supports. This will also need to be set to
 true if the distribution does not provide one for systemd. For example,
 Debian Wheezy.
 
+#### `manage_systemd_dir_path`
+
+Determines whether to manage the systemd unit file directory. Defaults to true.
+In the next release this directory will be unmanaged by this module and this
+parameter will be removed.
+
 #### `package_ensure`
 
 Sets the irqbalance package to be installed. Can be set to `present`,
@@ -334,7 +340,7 @@ This module has received very limited testing on:
 * SLES 11 SP1
 * Ubuntu 10.04/12.04/14.04
 
-against Puppet 2.7.x and 3.x
+against Puppet 3.8.7 and Puppet 4.x
 
 ## Development
 

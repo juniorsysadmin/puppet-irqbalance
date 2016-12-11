@@ -3,7 +3,11 @@ require 'spec_helper'
 describe 'irqbalance', :type => :class do
 
   context 'when on a multiprocessor system' do
-    let(:default_facts) { { :processorcount => '2', } }
+    let(:default_facts) { {
+      :processorcount => '2',
+      :rubyversion    => '2.1.10',
+      :facterversion  => '2.4.0'
+    } }
 
     [ '6.0', '7.0', '10.04', '12.04', '14.04', ].each do |operatingsystemrelease|
       context "running Debian/Ubuntu release #{operatingsystemrelease}" do
@@ -218,7 +222,7 @@ describe 'irqbalance', :type => :class do
 
         context 'with no banned_cpus parameter provided' do
           # The default for this parameter is undef
- 
+
           it 'the irqbalance config file should not contain IRQBALANCE_BANNED_CPUS' do
             should_not contain_file('/etc/default/irqbalance').with({
               'content' => /IRQBALANCE_BANNED_CPUS/,
@@ -264,7 +268,7 @@ describe 'irqbalance', :type => :class do
 
         context 'with no banirq parameter provided' do
           # The default for this parameter is undef
-  
+
           it 'the irqbalance config file should not contain --banirq' do
             should_not contain_file('/etc/default/irqbalance').with({
               'content' => /--banirq/,
@@ -655,7 +659,7 @@ describe 'irqbalance', :type => :class do
           context 'and *_init_script_file_source not set' do
             #The *_init_script_file_source parameters default to undef
             let (:params) { { :manage_init_script_file => true, } }
-          
+
             it 'the init script group should be root' do
               if operatingsystemrelease == '6.0' or operatingsystemrelease == '7.0'
                 should contain_file('/etc/init.d/irqbalance').with({
@@ -1149,7 +1153,7 @@ describe 'irqbalance', :type => :class do
 
         context 'with hintpolicy parameter set to exact' do
           let (:params) { { :hintpolicy => 'exact', } }
-  
+
           if operatingsystemrelease != '5.9'
             it 'the irqbalance config file should contain --hintpolicy=exact' do
               should contain_file('/etc/sysconfig/irqbalance').with({
@@ -1203,7 +1207,7 @@ describe 'irqbalance', :type => :class do
 
         context 'with no hintpolicy parameter provided' do
           # The default for this parameter is undef
-  
+
           it 'the irqbalance config file should not contain --hintpolicy' do
             should_not contain_file('/etc/sysconfig/irqbalance').with({
               'content' => /--hintpolicy/,
@@ -1462,7 +1466,7 @@ describe 'irqbalance', :type => :class do
           context 'and *_init_script_file_source not set' do
             # The *_init_script_file_source parameters default to undef
             let (:params) { { :manage_init_script_file => true, } }
-          
+
             it 'the init script group should be root' do
               if operatingsystemrelease == '5.9' or operatingsystemrelease == '6.6'
                 should contain_file('/etc/init.d/irqbalance').with({
@@ -1654,7 +1658,7 @@ describe 'irqbalance', :type => :class do
              'content' => /^IRQBALANCE_BANNED_CPUS="fc3,0000000"$/,
            })
          end
-       end       
+       end
 
        context 'with no banned_cpus parameter provided' do
          # The default for this parameter is undef
@@ -1702,7 +1706,7 @@ describe 'irqbalance', :type => :class do
         it 'the irqbalance config file should contain IRQBALANCE_BANNED_INTERRUPTS=""' do
           should contain_file('/etc/sysconfig/irqbalance').with({
             'content' => /^IRQBALANCE_BANNED_INTERRUPTS=""$/,
-          }) 
+          })
         end
       end
 
@@ -1852,7 +1856,7 @@ describe 'irqbalance', :type => :class do
         context 'and *_init_script_file_source not set' do
           # The *_init_script_file_source parameters default to undef
           let (:params) { { :manage_init_script_file => true, } }
-          
+
           it 'the init script group should be root' do
             should contain_file('/etc/init.d/irq_balancer').with({
               'group' => '0',
@@ -1893,6 +1897,8 @@ describe 'irqbalance', :type => :class do
       :operatingsystemrelease => '6.0',
       :osfamily               => 'RedHat',
       :processorcount         => '1',
+      :rubyversion            => '2.1.10',
+      :facterversion          => '2.4.0'
     }}
 
     context 'with the irqbalance service managed' do

@@ -1,7 +1,3 @@
-# == Class: irqbalance::params
-#
-# Default parameter values for the irqbalance module
-#
 class irqbalance::params {
   $affinity_mask                     = undef
   $args                              = undef
@@ -17,6 +13,7 @@ class irqbalance::params {
   $dependency_class                  = undef
   $deepestcache                      = undef
   $hintpolicy                        = undef
+  $manage_systemd_dir_path           = true
   $manage_init_script_file           = false
   $oneshot                           = 'no'
   $package_ensure                    = 'present'
@@ -180,7 +177,7 @@ class irqbalance::params {
         $config_file_template = 'irqbalance/config/el6-irqbalance.erb'
         $service_provider = 'redhat'
       }
-      
+
       # CentOS/RHEL 7
       # The irqbalance version included with CentOS/RHEL 7 is 1.06
       # The options accepted by this module are: --banirq=, --debug
@@ -289,4 +286,3 @@ class irqbalance::params {
     }
   }
 }
-
