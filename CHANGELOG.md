@@ -22,7 +22,7 @@ Code cleanup and preparation for next major release
 
 ### Bugs
 
-- Provides a workaround to #1 by with `manage_systemd_dir_path => false`
+- Provides a workaround to #1 with `manage_systemd_dir_path => false`
 
 ## 2015-01-11 Release 1.0.4
 
